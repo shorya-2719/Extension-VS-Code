@@ -1,0 +1,44 @@
+{
+  "name": "fetch-file-name-and-map",
+  "displayName": "Fetch-file-Name-And-Map",
+  "description": "It will fetch the name of the file and map it to a key value pair in a json file that is stored locally",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [{
+      "command": "fetch-file-name-and-map.helloWorld",
+      "title": "Hello World"
+    }],
+    "views": {
+      "your-extension-name": [
+        {
+          "id": "yourExtension.customView",
+          "name": "Custom View",
+          "icon": "spidy.png"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.82.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "eslint": "^8.47.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.6",
+    "@vscode/test-electron": "^2.3.4"
+  }
+}
