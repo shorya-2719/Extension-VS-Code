@@ -2,6 +2,7 @@
   "name": "fetch-file-name-and-map",
   "displayName": "Fetch-file-Name-And-Map",
   "description": "It will fetch the name of the file and map it to a key value pair in a json file that is stored locally",
+  "icon" : "./test.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.82.0"
@@ -20,8 +21,7 @@
       "your-extension-name": [
         {
           "id": "yourExtension.customView",
-          "name": "Custom View",
-          "icon": "spidy.png"
+          "name": "Custom View"
         }
       ]
     }
