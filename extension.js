@@ -31,7 +31,9 @@ function activate(context) {
 	const jsonFilePath = './example.json'; // Make sure to specify the correct file path
 
 	let sampleString = ''
-
+	let keys = []
+	let currString = "";
+	var map = new Map();
 	fs.readFile(jsonFilePath, 'utf8', (err, data) => {
 		if (err) {
 			console.error('Error:', err);
@@ -40,33 +42,30 @@ function activate(context) {
 		}
 		let jsonData = JSON.parse(data);
 		console.log(jsonData); // This is the JSON data
-
 		// Convert jsonData to a key-value pair string
-		let keyValueString = '';
-		for (let key in jsonData) {
-			if (jsonData.hasOwnProperty(key)) {
-				keyValueString += `${key}: ${jsonData[key]}\n`;
+		for (let key in jsonData[currentlyOpenTabfileName]){
+			currString+= `<h2>${key}</h2>\n`;
+			for(let s in jsonData[currentlyOpenTabfileName][key]){
+				currString+=`<li>${jsonData[currentlyOpenTabfileName][key][s]}</li>\n`;
 			}
 		}
-
-		console.log(keyValueString); // This is the key-value pair string
-		sampleString = keyValueString;
 	});
+	// let strong = "<h2>Teri to bc</h2>";
+	// let secstring = map.size;
+	// for(let key in map){
+	// 	currString+= `<h2>${key}</h2> + \n`;
+	// 	for(let s in map.get(key)){
+	// 		currString+=`<ul>${s}</ul> + \n`;
+	// 	}
+	// }
 
 	console.log(sampleString)
 	// customViewActivate(contxt);
-
-
-	// CovertToMap(jsonData);
-	// Map.get(currentlyOpenTabfileName);
-
-	// console.log('Congratulations, your extension "fetch-file-name-and-map" is now active!');
-
 	let disposable = vscode.commands.registerCommand('fetch-file-name-and-map.myCommand', function () {
 		const panel = vscode.window.createWebviewPanel(
 			'mySidebarView',
 			`Checklist for : ${currentlyOpenTabfileName}`,
-			vscode.ViewColumn.One, // Position in the sidebar
+			vscode.ViewColumn.Beside, // Position in the sidebar
 			{
 				enableScripts: true,
 				localResourceRoots: [
@@ -80,8 +79,10 @@ function activate(context) {
 			path.join(context.extensionPath, 'webview', 'sidebar.html')
 		);
 	
-		panel.webview.html = `<h1>${sampleString}</h1>
-		<h2> There is someone here who can use your hep</h2>`;
+		panel.webview.html = `<h1>Checklist for : ${currentlyOpenTabfileName}</h1>
+		<h2>----------------------------------------------------------------------------------------</h2>
+		<h2>${currString}</h2>
+		`;
 	});
 
 	// The command has been defined in the package.json file

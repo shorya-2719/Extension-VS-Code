@@ -1,4 +1,12 @@
 {
-	"extension.js" : "Yes this is the value that we need.",
-	"sidebar.html" : "Yes here we have the sidebar"
+	"extension.js" : {
+		"heading 1" : ["WE are who we are", "Mia san Mia", "Lewandowsi"],
+		"heading 2" : ["Are we who we are", "Ikjot singh Dhody", "suryaaaaa"],
+		"heading 3" : ["Pakistan", "What a green flag brother"]
+	},
+	"sidebar.html" : {
+		"heading 1" : ["WE are who we are : s1", "Mia san Mia : s1", "Lewandowsi : s1"],
+		"heading 2" : ["Are we who we are : s1", "Ikjot singh Dhody :s1", "suryaaaaa :s1"],
+		"heading 3" : ["Pakistan :s1", "What a green flag brother :s1"]
+	}
 }
