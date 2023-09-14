@@ -65,7 +65,7 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand('fetch-file-name-and-map.myCommand', function () {
 		const panel = vscode.window.createWebviewPanel(
 			'mySidebarView',
-			'My Sidebar',
+			`Checklist for :${currentlyOpenTabfileName}`,
 			vscode.ViewColumn.One, // Position in the sidebar
 			{
 				enableScripts: true,
