@@ -27,26 +27,34 @@ function activate(context) {
             // You can also update currentlyOpenTabfileName here if needed
         }
     });
-	let keyValueString = '';
+	
 	const jsonFilePath = './example.json'; // Make sure to specify the correct file path
+
+	let sampleString = ''
+
 	fs.readFile(jsonFilePath, 'utf8', (err, data) => {
 		if (err) {
 			console.error('Error:', err);
+			sampleString = err.toString();
 			return;
 		}
 		let jsonData = JSON.parse(data);
 		console.log(jsonData); // This is the JSON data
 
 		// Convert jsonData to a key-value pair string
+		let keyValueString = '';
 		for (let key in jsonData) {
 			if (jsonData.hasOwnProperty(key)) {
 				keyValueString += `${key}: ${jsonData[key]}\n`;
 			}
 		}
+
+		console.log(keyValueString); // This is the key-value pair string
+		sampleString = keyValueString;
 	});
 
-
-	// customViewActivate(context);
+	console.log(sampleString)
+	// customViewActivate(contxt);
 
 
 	// CovertToMap(jsonData);
@@ -72,7 +80,7 @@ function activate(context) {
 			path.join(context.extensionPath, 'webview', 'sidebar.html')
 		);
 	
-		panel.webview.html = `<h1>${keyValueString}</h1>
+		panel.webview.html = `<h1>${sampleString}</h1>
 		<h2> There is someone here who can use your hep</h2>`;
 	});
 
