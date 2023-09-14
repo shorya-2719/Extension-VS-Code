@@ -1,0 +1,30 @@
+<!-- sidebar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+    <h1>My Sidebar</h1>
+    <h2 id="lewy"> This is the current active file</h2>
+    <button type="button"
+        onclick="document.getElementById('lewy').innerHTML = Date()">
+        Click me to display Date and Time.</button>   
+</body>
+
+<script>
+    const vscode = require('vscode');
+    const path = require('path')
+    // const vscode = acquireVsCodeApi();
+
+    var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
+    var currentlyOpenTabfileName = path.basename(currentlyOpenTabfilePath);
+
+    document.getElementById('myButton').addEventListener('click', () => {
+        document.getElementById("lewy").innerHTML= currentlyOpenTabfileName;
+    });
+</script>
+
+</html>

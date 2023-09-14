@@ -13,8 +13,8 @@
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "fetch-file-name-and-map.helloWorld",
-      "title": "Hello World"
+      "command": "fetch-file-name-and-map.myCommand",
+      "title": "Display sidebar"
     }],
     "views": {
       "your-extension-name": [

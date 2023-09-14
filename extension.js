@@ -13,46 +13,71 @@ const { activate: customViewActivate } = require('./customView');
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	var currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
 	var currentlyOpenTabfileName = path.basename(currentlyOpenTabfilePath);
 
+	if (vscode.window.activeTextEditor) {
+        currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName;
+    }
 
-// Specify the path to your JSON file
-	const jsonFilePath = './example.json';
-
-	// Read the JSON file using fs.readFile
-	let jsondata;
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+        if (editor) {
+            currentlyOpenTabfilePath = editor.document.fileName;
+			currentlyOpenTabfileName = path.basename(currentlyOpenTabfilePath)
+            // You can also update currentlyOpenTabfileName here if needed
+        }
+    });
+	let keyValueString = '';
+	const jsonFilePath = './example.json'; // Make sure to specify the correct file path
 	fs.readFile(jsonFilePath, 'utf8', (err, data) => {
 		if (err) {
 			console.error('Error:', err);
 			return;
 		}
 		let jsonData = JSON.parse(data);
-		jsondata = jsonData;
 		console.log(jsonData); // This is the JSON data
+
+		// Convert jsonData to a key-value pair string
+		for (let key in jsonData) {
+			if (jsonData.hasOwnProperty(key)) {
+				keyValueString += `${key}: ${jsonData[key]}\n`;
+			}
+		}
 	});
 
-	customViewActivate(context);
+
+	// customViewActivate(context);
+
 
 	// CovertToMap(jsonData);
 	// Map.get(currentlyOpenTabfileName);
 
+	// console.log('Congratulations, your extension "fetch-file-name-and-map" is now active!');
 
-	console.log('Congratulations, your extension "fetch-file-name-and-map" is now active!');
+	let disposable = vscode.commands.registerCommand('fetch-file-name-and-map.myCommand', function () {
+		const panel = vscode.window.createWebviewPanel(
+			'mySidebarView',
+			'My Sidebar',
+			vscode.ViewColumn.One, // Position in the sidebar
+			{
+				enableScripts: true,
+				localResourceRoots: [
+					vscode.Uri.file(path.join(context.extensionPath, 'webview'))
+				]
+			}
+		);
+	
+		// Load your HTML content into the webview panel
+		const htmlPath = vscode.Uri.file(
+			path.join(context.extensionPath, 'webview', 'sidebar.html')
+		);
+	
+		panel.webview.html = `<h1>${keyValueString}</h1>
+		<h2> There is someone here who can use your hep</h2>`;
+	});
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('fetch-file-name-and-map.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Fetch-file-Name-And-Map!');
-	});
-
-	context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
