@@ -73,7 +73,7 @@ function activate(context) {
 		// i.appendLine(a);
 		i.show();
 		panel.webview.html = `<h1>Checklist for : ${currentlyOpenTabfileName}</h1>
-		<h2>----------------------------------------------------------------------------------------</h2>
+		<h2>------------------------------------------------------------</h2>
 		<h2>${currString}</h2>
 		`;
 	});
