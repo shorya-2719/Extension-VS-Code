@@ -31,7 +31,7 @@ function activate(context) {
 		});
 
 		let i = vscode.window.createOutputChannel("Orange");
-		const jsonFilePath = './example.json'; 
+		const jsonFilePath = './cluster.json'; 
 		i.appendLine("We are here in the func");
 		let currString = "";
 
@@ -73,7 +73,7 @@ function activate(context) {
 		// i.appendLine(a);
 		i.show();
 		panel.webview.html = `<h1>Checklist for : ${currentlyOpenTabfileName}</h1>
-		<h2>------------------------------------------------------------</h2>
+		<hr>
 		<h2>${currString}</h2>
 		`;
 	});

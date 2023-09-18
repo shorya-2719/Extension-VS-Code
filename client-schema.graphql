@@ -1,0 +1,5378 @@
+# --- Client schema ---
+# Contains fields (tagged with @client) that are not present in the server schema
+
+type Query {
+  imageAltText: String
+  streamCameraDialogReturn(id: ID!): StreamCameraDialogReturn!
+  dlpDialogData: DlpDialogData
+  insertedHyperlink: FluidInsertedHyperlink
+  twoWaySmsFriendlyName: String
+  attendeeCaptionsVisibility(broadcastId: ID!): Boolean
+  callingDebugTool: CallingDebugTool
+  meetingRoomLayoutToggleState: MeetingRoomLayoutToggleState
+  isUbarRenderComplete: Boolean
+  shouldLaunchWhiteboardOnLoad: Boolean
+  whiteboardWalkUpState: WhiteboardWalkUpState
+  # param callingIntentId - calling intent id
+  # @return pre-join screen state for particular intent
+  prejoinState(callingIntentId: ID!): PrejoinState!
+  # @return the currently selected branding theme
+  meetingBrandingInfoCache(id: ID!): MeetingBrandingInfoCache!
+  streamPermissionsDebug: StreamPermissionsDebug!
+  DebugConversation: DebugConversation
+  bulkMoveStatus(teamsCallId: ID): BulkMoveStatus!
+  channelSearch(searchQuery: String!): ChannelSearchResults!
+  channel(channelId: String!, parentTeamId: String): ChannelWithTeam
+  activeCalls: [ICallInfo!]
+  activeMeetings: [MeetingCompositeKey!]
+  recentMeetings: [MeetingCompositeKey!]
+  pinnedMeetings: [MeetingCompositeKey!]
+  # @returns - active ppt sharing session
+  pptSharingSession: ActivePptSession
+  # @returns - active wb sharing session - WhiteboardSharingSession instance
+  whiteboardSharingSession: WhiteboardSharingSession
+  calendarMeetingInfo(
+    conversationId: ID!
+    messageId: ID!
+    modifiedStamp: Int
+  ): MeetingInfo
+  deletedMessages: [DeletedMessage!]
+  # @param conversationId - conversationId of the message
+  # @param messageId - messageId of the message
+  # @param setFocusOnClose - whether to focus on original message when close
+  # @returns - true if successful
+  requestImmersiveReader(
+    conversationId: String!
+    messageId: String!
+    setFocusOnClose: Boolean!
+  ): Boolean
+  # @param teamsCallId - teamsCallId of the call
+  # @return meetingRoomFrontOfRoomCallPanelsState for the given teamsCallId
+  meetingRoomFrontOfRoomCallPanelsState(
+    teamsCallId: ID!
+  ): MeetingRoomFrontOfRoomCallPanelsState
+  # get LPC state
+  lpcState: LpcState!
+  # @returns - the active Window given its ID
+  activeWindow(windowId: ID): Window!
+  myselfSettings(teamsCallId: ID!): UpdateMyselfSettings!
+  # @returns - the window containing entity with entityId
+  # DO NOT USE OUTSIDE OF CORE
+  activeWindowForEntity(entity: EntityInput!): Window
+  # @returns - the active windows
+  # DO NOT USE OUTSIDE OF CORE
+  activeWindows: [Window!]!
+  # @returns the anonymous display name used during this session
+  anonymousDisplayName: String
+  # @returns boolean for state of byod toggle for the given teamsCallId
+  byodState(teamsCallId: ID!): ByodState!
+  # @returns CallingScreenStatus for the given teamsCallId
+  # @param teamsCallId - teamsCallId of the call
+  callingScreenStatus(teamsCallId: ID!): CallingScreenStatus!
+  # @returns VideoScanTypeResponse for the given teamsCallId
+  # @param teamsCallId - teamsCallId of the call
+  videoScanType(teamsCallId: ID!): VideoScanTypeResponse!
+  # @returns CallingScreenLayout for the given teamsCallId - user preferred layout for the current call
+  # @param teamsCallId - teamsCallId of the call
+  callingScreenLayout(teamsCallId: ID!): CallingScreenLayout!
+  # @param teamsCallId - teamsCallId of the call (call.id)
+  isCallingScreenReady(teamsCallId: ID!): Boolean!
+  # @returns - QuotedReply data for a message that was set up to be quoted.
+  # @param convId - the id for the conversation the reply is being added to
+  quotedReply(convId: String!): QuotedReply
+  # @returns - Forward card data for message that is to be forwarded
+  # @param convId - the id for the conversation the forward card data was saved for
+  forwardCard(convId: String!): ForwardMessage
+  # returns the broadcast layout
+  # @param teamsCallId - the associated call id
+  broadcastLayout(teamsCallId: ID!): BroadcastLayout!
+  # returns the list of Hardware out devices
+  getHardwareOutDevices: [HardwareOutDevice!]
+  # returns the captionFontSize
+  # @param teamsCallId - the associated call id
+  captionFontSize(teamsCallId: ID!): CaptionFontSizeType!
+  # @param conversationId - conversationId of the current compose
+  # @param composeId - compose unique ID
+  # @return - url added/updated/deleted, or content reload in compose box
+  composeLinkChanged(
+    conversationId: String!
+    composeId: String
+  ): LinkChangedInfo
+  # @param conversationId - conversation ID of the current chat
+  # @param composeId - compose unique ID
+  # @return - Fluid URL added in compose box
+  fluidLinkChanged(conversationId: ID!, composeId: ID!): FluidLinkChangedInfo
+  # @param dateRangeType - should dateRangeType from local storage
+  # @param workHours - should workHours from local storage
+  # @param workWeekDays - should workWeekDays from local storage
+  # @return - calendar settings from local storage
+  calendarSettingsFromLocalStorage(
+    shouldGetDateRangeType: Boolean
+    shouldGetWorkHours: Boolean
+    shouldGetWorkWeekDays: Boolean
+  ): ICalendarSettings!
+  # @return - the local state of MessageExtensionsApps
+  messageExtensionsAppsState(convId: ID!): MessageExtensionsAppsState!
+  # @options - install scopes of interest
+  # @return - Fetch policy for respective scopes
+  platformAppsBatchFetchPolicy(
+    options: [PlatformAppsFetchPolicyOptions!]!
+  ): [PlatformAppsFetchPolicy!]
+  # @return - whether calling is allowed
+  callingAllowed: CallingAllowed!
+  taskModuleResult: TaskModuleResult
+  # @return - the local state of app details
+  appDetailsResult: AppDetailsResult!
+  isFake: Boolean
+  # @return - the local state of the in context store app launch options
+  inContextStoreLaunchInstalledAppResult: InContextStoreLaunchInstalledAppResult
+  # @return - last selected camera device Id
+  lastSelectedCameraId: ID!
+  # @return - the local state of select media
+  selectMediaResult: SelectMediaResult
+  # @return - the local state of view images
+  viewImagesResult: ViewImagesResult
+  # @return - the local state of location coordinates
+  mapCoordinateResult: MapCoordinateResult
+  showLocationResponse: String
+  # @return - the local state of people picker selections
+  selectPeoplePickerResult: [SelectPeoplePickerResult!]!
+  # @return - history of participants joined to a call
+  breakoutRoomParticipantsHistory(teamsCallId: ID!): [String!]!
+  # current client state of Breakout Rooms
+  breakoutRoomsClientState(
+    coordinates: RoomCoordinatesInput!
+  ): BreakoutRoomsClientState
+  # @param teamsCallId - call id
+  # @return - array of participant id's who's voiceLevel is 1
+  voiceLevels(teamsCallId: ID!): [ID!]!
+  # @param - teamId: ID of the class team
+  # @return - notification count for each class team
+  classTeamCardNotificationsCount(teamId: ID!): Int!
+  # returns the streamUrl for face enrollment
+  # @return string if streamUrl is present
+  faceEnrollmentStream: BiometricEnrollmentMedia!
+  bossConsumptionHorizon(bossId: String): BossConsumptionHorizon
+  dateRange: [String!]
+  selectedDate: String
+  calendarEventsSelectedPageIndex: Int
+  dateRangeType: String
+  calendarSurfaceFilterValue: CalendarSurfaceFilterValue
+  workWeekDays: [Int!]
+  workHours: IWorkHours
+  firstDayOfWeek: Int
+  statusBarMessage: StatusBarMessage
+  calendarEventCardCallout: CalendarEventCardCallout
+  # Used by channel picker to prioritise given team IDs while ordering
+  channelPickerPriorityTeamIds: [ID!]
+  # Used by Add entire class component to conditionally render button by checking the course availability status
+  teamAvailabilityStatusForCourse: String
+  # The ID of the active tab inside calendar app
+  calendarActiveTabId: String!
+  # The list of hosted tabs inside calendar app
+  calendarHostedTabsList: [CalendarSurfaceExtendedTab!]!
+  # @param - The compose id
+  # @return - Chat bottom compose message state
+  composeState(id: ID!): ComposeMessageState
+  messagePaneScrolledToStartState(id: ID!): MessagePaneScrolledToStartState
+  # Retrieve from the local cache Loop's available components.
+  # @param The requested locale for the Loop entries.
+  # @return When available, locally cached JSON string containing a stringified array with all available Loop components.
+  fluidManifestEntries(locale: String!): FluidManifestEntries
+  # @return - fluid messages that can be loaded
+  fluidMessages: [FluidMessage!]
+  # @return - Pending Fluid at-mentions not yet sent in from compose mode
+  fluidPendingMentions(componentHash: ID!): [FluidPendingMention!]!
+  # Get the state of video effect
+  # @param effect - the video effect
+  # @return video effect state
+  debugVideoEffectState(effect: VideoEffect!): VideoEffectStateType!
+  # returns draft chat transition data from the cache
+  draftChatIdChanged: DraftChatIdChangedInfo
+  # @returns tabConfigurationResult
+  # @param id - thread Id
+  tabConfigurationResult(id: String!): tabConfigurationResult
+  # @returns tabDeletionResult
+  # @param threadId - thread Id
+  # @param channelMeetingMessageId - optional channel meeting message Id
+  tabDeletionResult(
+    threadId: String!
+    channelMeetingMessageId: String
+  ): TabDeletionResult
+  # @returns messageToParentResult
+  # @param id - appId
+  messageToParentResult(appId: ID!): messageToParentResult
+  # @returns messageToChildResult
+  # @param id - appId
+  messageToChildResult(appId: ID!): messageToChildResult
+  appButtonResult(appId: ID!): AppButtonResult
+  # @returns change settings
+  # @param id - appId
+  changeSettingsResult(id: ID!): ChangeSettingsResult
+  # @returns changeSettings trigger Result
+  # @param id - appId
+  changeSettingsTriggerResult(id: ID!): ChangeSettingsTriggerResult
+  # @returns SchedulingFormData
+  # @param eventId - Id of the calendar event
+  activeSchedulingFormData(eventId: String): SchedulingFormData
+  # @returns current selected video effects info
+  selectedBackgroundsInfo: BackgroundsInfo
+  # Whether to keep the video effects and avtar preview window in side panel
+  shouldKeepPreviewWindowInSidePanelOpen: Boolean!
+  # Is turning on video from preview
+  isTurningOnVideoFromPreview: Boolean!
+  # whether to reload the video app
+  shouldReloadVideoApp: Boolean!
+  # whether to show the hosted web content for video effects customization
+  shouldShowVideoApp: Boolean!
+  # Whether to show the video effects preview
+  shouldShowVideoEffectsPreview: Boolean!
+  # whether to refresh video filters cache
+  shouldRefreshVideoFilters: Boolean!
+  # active video effects that currently applied to user video/under applying process/showing app page, need to mount webview for all active video effects
+  # active video effects is to save video effects information that need to mount webview
+  # there will be at most three video apps webview mounted at the same time, which are 1. applied to user video/ 2. showing app page/ 3. under applying process
+  activeVideoEffects: ActiveVideoEffects!
+  # current info for video effects feature, including applied/under applying process/showing app page/is installing video effect
+  # video effects current info is using for saving all UI status for video effects
+  videoEffectsCurrentInfo: VideoEffectsCurrentInfo!
+  # whether to show Calendar Scheduling Form Spinner
+  shouldShowSchedulingFormSpinner(eventId: String): Boolean
+  # @return video app post message event
+  videoAppPostMessageEvent: VideoAppPostMessageEvent
+  # @return avatar app post message event
+  avatarAppPostMessageEvent: VideoAppPostMessageEvent
+  # @return video app notification
+  videoNotification: VideoNotification
+  # @return avatar app error notification
+  avatarErrorNotification: AvatarErrorNotification
+  # @return should show avatar quick picker error notification
+  avatarQuickPickerErrorNotification: AvatarErrorNotification
+  # @return the local state of the archive team data
+  archiveTeamResult: ArchiveTeamResult!
+  # @return should set avatar renderer timeout
+  shouldSetAvatarRendererTimeout: Boolean!
+  # @returns PinnedParticipantIds for the given teamsCallId
+  pinnedParticipantIds(teamsCallId: ID!): PinnedParticipantIds
+  # @returns OptionalTelemetryDataBags for optional telemetry dataBags
+  optionalTelemetry: OptionalTelemetryDataBags
+  # @return - the local state of custom app upload
+  customAppUploadResult: CustomAppUploadResult!
+  # @returns - File data for the selected smart reply file suggestion
+  # @param convId - the id for the conversation the file is being added to
+  smartReplyFileSuggestion(convId: String!): SmartReplyFileSuggestion
+  # @returns - id - which type of coachmark we should display for Loop compose scenario
+  coachMarkCommand: CoachMarkCommandResult!
+  # @returns - webhookToken string when an outgoing webhook is created
+  webhookConfirmationResult: String!
+  # @returns latest avatar data
+  avatarInfo: AvatarPayload
+  # @returns current selected avatar and background
+  selectedAvatarInfo: SelectedAvatarInfo
+  isAvatarAppLoaded: Boolean!
+  # Indicates whether the app device permissions were updated for the given appId
+  appDevicePermissionsUpdated(appId: ID!): AppDevicePermissionsUpdated
+  # Shared app caching list updated across meetings and channels
+  cachedAppList: CachedAppList!
+  # Whether to show enhanced preview in meeting
+  shouldShowPopupPreview: Boolean!
+  # Active tab in scheduling form.
+  schedulingFormActiveTab: SchedulingFormTab
+  # @returns Blocking tasks in scheduling form.
+  schedulingFormBlockingTasks: [SchedulingFormTask!]!
+  # @returns Last terminating action triggered in scheduling form.
+  schedulingFormTerminatingAction: SchedulingFormTerminatingActionType
+  # Whether avatar menu item should be selected in video effects and avatars side panel for first rendering
+  shouldAvatarMenuItemSelected: Boolean!
+  # @returns color and its associated assigned state in left rail
+  calendarLeftRailChannelColors: [CalendarLeftRailChannelColorsState]
+  # @return current calling state
+  currentCallingState: CurrentCallingState!
+  # @return localFrameContext data
+  localFrameContext: LocalFrameContext
+  # @returns which virtual event's  action has been triggered.
+  virtualEventAction: VirtualEventAction
+  # @returns meta info of meeting bot
+  meetingBotMetaInfo: MeetingBotMetaInfo!
+  # @return events of meetings in range from start to end
+  meetingBotCalendarEvents(
+    start: DateTime!
+    end: DateTime!
+  ): [MeetingBotCalendarEvent!]!
+  # @return chatId of calendar event
+  meetingBotChatIdForCalendarEvent(eventId: ID!): ID!
+  # @return compositor regions for given calling intent id
+  compositorRegions(callingIntentId: ID!): [Region!]!
+  # @returns virtual event scheduling form data.
+  virtualEventSchedulingFormData: VirtualEventSchedulingFormData
+  # @return avatar app availability info
+  avatarAppAvailabilityInfo: AvatarAppAvailabilityInfo!
+  # whether avatar mru loaded
+  isAvatarMRULoaded: Boolean!
+  # @return meetingCollabAppTriggerOpen
+  isMeetingCollabOpen: Boolean
+  # @return whether stop sharing is triggered on stage or not
+  isStopSharingTriggeredOnStage: Boolean
+  appsBadgeRead: Boolean!
+  # @return backButtonHandlerState data
+  backButtonHandlerState: BackButtonHandlerState
+  # @returns immersive view mode app availability info
+  immersiveViewModeAppAvailabilityInfo: ImmersiveViewModeAppAvailabilityInfo!
+  # @return local state of the M365 Chat Bot's stop generating scenario
+  m365ChatBotStopGeneratingScenario: M365ChatBotStopGeneratingScenario!
+  # @return local state of the M365 Chat Bot
+  m365ChatBotState: M365ChatBotState!
+  # @return local state of the M365 Chat Bot's telemetry
+  m365ChatBotTelemetry: M365ChatBotTelemetry!
+  # @return timeout id of the send-disabling setTimeout
+  m365ChatBotDisableSendTimeout: M365ChatBotDisableSendTimeout!
+  # @return if bizchat can show the flair
+  m365ChatBotFlair: M365ChatBotFlair!
+  # @return debug closed captions event
+  debugClosedCaptionsEvent: DebugClosedCaptionsEvent
+  # @returns whether to show hard-delete connected calendar surface dialog
+  shouldShowHardDeleteConnectedCalendarSurfaceDialog: Boolean!
+  # @return local state of the M365 Chat Bot's FRE state
+  m365ChatSuggestionState: M365ChatSuggestionState!
+  # @return Geo location of the current device for BizChat.
+  m365GeoLocation: M365GeoLocation
+}
+
+type Mutation {
+  # Sets the calling screen status got the given callingIntentId
+  # @param teamsCallId - teamsCallId of the call
+  # @param state - new state for the calling screen status object
+  setMeetingRoomFrontOfRoomCallPanelsState(
+    teamsCallId: ID!
+    state: MeetingRoomFrontOfRoomCallPanelsStateInput!
+  ): MeetingRoomFrontOfRoomCallPanelsState
+  # Sets the status for UBAR render complete
+  # @param isComplete - new value to set
+  setUbarRenderComplete(isComplete: Boolean!): Boolean!
+  # Emmits an event to the callParticipantPinnedv2 subscription
+  # @param participantId - pinned/unpinned participant id
+  toggleParticipantPin(participantId: String!): Boolean!
+  # Emits an event to the setScalingEvent subscription
+  # @param participantId - id of participant to change scaling mode of
+  # @param streamType - which stream to change the scaling mode of
+  # @param newScaling - the new scaling mode to set
+  setScaling(
+    participantId: ID!
+    streamType: StreamType!
+    newScaling: ScalingMode!
+  ): Boolean
+  # Emits an event to the scalingModeUpdated subscription
+  # @param participantId - the id of the participant whose scaling mode was changed
+  # @param streamType - the type of stream that was changed
+  # @param newScaling - the new scaling mode
+  scalingModeUpdated(
+    participantId: ID!
+    streamType: StreamType!
+    newScaling: ScalingMode!
+  ): Boolean
+  # Performs window history navigation.
+  # @param navigationDirection - the direction of the navigation.
+  # @param windowId - the ID of the window that navigation will occur on.
+  performWindowHistoryNavigation(
+    navigationDirection: NavigationDirection!
+    windowId: ID!
+  ): Boolean
+  # Navigates to the specified window history index.
+  # @param windowHistoryIndex - the window history index.
+  # @param windowId - the ID of the window that navigation will occur on.
+  navigateToWindowHistoryIndex(windowHistoryIndex: Int!, windowId: ID!): Boolean
+  # Accept stream permissions
+  # @return - boolean
+  acceptStreamPermissionsDebug: Boolean!
+  # @param todayDate - Current Date
+  # @return - calendar input going to today
+  goToToday(todayDate: String!): CalendarInput
+  # @return - calendar input going to next day
+  goToNext: CalendarInput
+  # @return - calendar input going to previous day
+  goToPrevious: CalendarInput
+  # @param todayDate - Current Date
+  # @param dateRangeType - Selected date range type
+  # @return - calendar input going to today
+  changeViewMode(todayDate: String!, dateRangeType: String!): CalendarInput
+  # @param dateRangeType - dateRangeType Day/Week/WorkWeek
+  # @param workHours - user's work hours
+  # @param workWeekDays - user's work weekdays
+  # @param isLeftRailExpanded - whether user has set calendar left rail as expanded or not
+  # @return - Boolean indicating whether storing the passed settings in local storage succeeded
+  saveCalendarSettingsInLocalStorage(
+    dateRangeType: String
+    workHours: IWorkHoursInput
+    workWeekDays: [Int!]
+    isLeftRailExpanded: Boolean
+  ): Boolean!
+  # @param calloutCalendarEvent - (peek / right clicked) calendar event
+  # @param target - (peek / context menu) target point on window
+  # @return - boolean, as graphql doesn't support void type
+  eventCardCallout(
+    calloutCalendarEvent: CalloutCalendarEventInput
+    target: CalloutTargetInput
+  ): Boolean
+  # @param convId - Conversation Id
+  # @return - current active calls as calendar input
+  updateActiveCalls(convId: String): CalendarInput
+  # @return - current active calls as calendar input
+  setImageAltText(altText: String!): Boolean
+  # @param displayText - Selected text on which hyperlink needs to be applie
+  # @param address - url
+  # @return boolean indicating if storing displaytext and address succeeded
+  insertHyperlink(displayText: String!, address: String!): Boolean
+  setActiveCalls: CalendarInput
+  # @return - dlp dialog data
+  setDlpDialogData(
+    isReport: Boolean!
+    isOverride: Boolean!
+    justification: String!
+  ): DlpDialogData
+  # @return BulkMoveStatus as current status of bulkMove mutation
+  setBulkMoveStatus(status: BulkMoveStatusInput!): BulkMoveStatus
+  # @param count - count of hidden items in passive bar
+  # @return Passive Bar data
+  setDebugToolHiddenParticipantsCount(count: Int!): CallingDebugTool
+  # @param speakerVolume - value to set the volume to
+  # @return the volume
+  setDebugSpeakerVolume(speakerVolume: Int!): Int
+  # @param visible - Should debug toolbar be visible
+  # @return Debug tool settings
+  setDebugToolVisible(visible: Boolean!): CallingDebugTool
+  # @return - calendar input to update date-range and work-hours
+  setDateRange: CalendarInput
+  # @return - update tfl two way sms friendly name
+  setTwoWaySmsFriendlyName(twoWaySmsFriendlyName: String!): Boolean
+  # @return - new call created in call registry
+  createDebugCall(options: CreateDebugCallInput!): Call
+  # @return - new call created in call registry
+  createDebugCallingIntent(options: CreateDebugCallInput!): CallingIntent
+  #  @param isEnabled: updated state of the layout button
+  #  @return - boolean
+  updateMeetingRoomLayoutToggleState(
+    state: MeetingRoomLayoutToggleStateInput!
+  ): Boolean
+  updateShouldLaunchWhiteboardOnLoad(
+    shouldLaunchWhiteboardOnLoad: Boolean!
+  ): Boolean
+  updateWhiteboardWalkUpState(state: WhiteboardWalkUpStateInput!): Boolean
+  # @param callingIntentId - CallingIntent ID to use for call join
+  # @param joinOptions - Call join options overides
+  joinDebugCallFromIntent(
+    callingIntentId: ID!
+    joinOptions: JoinOptionsInput
+  ): Call
+  # @return - fake conversation id
+  createDebugConversation(
+    options: CreateDebugConversationInput!
+  ): DebugConversation
+
+  # Executes the given command on the given entity to update the active entities
+  # @param entity - the entity to execute the command on
+  # @param command - the command to execute
+  # @param windowId - the ID of the window the command is on behalf of
+  # @param entityOptions - optional entity parameters
+  # @param windowOptions - optional window parameters
+  # @returns - the updated window id
+  executeEntityCommand(
+    entity: EntityInput!
+    command: EntityCommandInput!
+    windowId: ID
+    entityOptions: String
+    executionContext: ExecutionContextInput
+    windowOptions: WindowOptionsInput
+    clientLaunchId: String
+  ): Window
+  # Takes a snapshot of reactive vars (activeEntities + rvs) and saves to window history
+  # @param windowId - id of window to save rvs to history for
+  # @param appId - id of app whose navigational rvs have changed and need to saved to history
+  saveReactiveVarsToHistory(windowId: ID, appIds: [String!]!): Boolean
+  # Adds an extension command to block transitions for the given window
+  addBlockingExtension(
+    entity: EntityInput!
+    windowId: ID!
+    entityOptions: String
+    removeBlock: Boolean!
+  ): Boolean!
+  # removes active windows for a user, we call this at time of sign-out
+  # @param userId - the user we want to remove their active windows
+  # @returns - true if successful, and false if the update cache query fails
+  removeUserActiveWindows(userContextId: String!): Boolean!
+  # @param entity - the entity to update
+  # @param viewEntityName - the view entity to update
+  # @param windowId - the window to update
+  # @returns - true if successful
+  updateEntity(
+    entity: EntityInput!
+    entityOptions: String
+    viewEntityName: SupportedViewEntities!
+    windowId: ID
+  ): Boolean
+  # @param entity - the entity to update
+  # @param entityState - input values to change
+  # @returns - true if successful
+  updateEntityState(entity: EntityInput, entityState: EntityStateInput): Boolean
+  # @param call - call fields to update
+  # @return - updated call
+
+  # @param windowId - the id of the window to update the fullscreen state of
+  # @param isFullscreen - boolean indicating the fullscreen state of the window
+  setWindowFullscreen(windowId: ID!, isFullscreen: Boolean!): Window
+
+  # @param windowId - the id of the window to update the fullscreen state of
+  # @param width - width of the slot to resizable onDrag event
+  # @param slotName - name of the activeSlot dragged
+  resizeSlotDimensions(
+    windowId: ID!
+    slotName: SlotName!
+    width: String!
+  ): Window
+  # @param windowId - the id of the window to update the header slot of
+  # @param height - the header height of the window
+  resizeHeaderSlot(windowId: ID!, height: String!): Window
+
+  # @param windowId - the id of the window to update the slot visibility of
+  # @param slotNames - the names of the slots to update
+  # @param isHidden - the desired hidden value of the slots
+  changeSlotsVisibility(
+    isHidden: Boolean
+    slotNames: [SlotName!]!
+    windowId: ID!
+  ): Window
+
+  # @param windowId - the id of the window to update the slot content of
+  # @param entityType - the type of the entity to update
+  # @param entityAction - the action to update the entity with
+  # @param entityOptions - the options to update the entity with
+  changeMonitorSlotContent(
+    windowId: ID!
+    entityType: EntityType!
+    entityAction: EntityAction!
+    entityOptions: String!
+  ): Window
+
+  updateDebugCall(call: DebugCallUpdate!): Call
+  # @param callId - callId to add the participant to
+  # @param participantId - participant ID, that must be added to the call
+  # @param participantKind - kind of the participant, that will be added to the call
+  # @param mappedTo - id of the device participant is recognized on
+  # @return - fake call participant (Standard participant or Plaza room)
+  addDebugParticipant(
+    callId: ID!
+    participantId: ID
+    participantKind: CallParticipantKind!
+    mappedTo: ID
+    isHololens: Boolean
+  ): Participant
+  # @param callId - callId to add the participants to
+  # @param withAudio - amount of participants to be added with audio only
+  # @param participantKind - amount of participants to be added with video
+  createDebugParticipants(options: CreateDebugParticipants!): [Participant]
+  # @param callId - teamsCallId of call to start recording
+  # @return - true if start recording event was fired
+  startDebugRecording(callId: ID!): Boolean!
+  # @param callId - teamsCallId of call to stop recording
+  # @return - true if stop recording event was fired
+  stopDebugRecording(callId: ID!): Boolean!
+  # @param callId - teamsCallId of call
+  # @param state - transcript state to be set
+  # @return - true if transcript state event was fired
+  setCallTranscriptStateDebug(callId: ID!, state: String!): Boolean!
+  # @param callId - teamsCallId of call
+  # @param type - CallTransriptEntryType
+  # @param text - transcribed text
+  # @param speakerId - userId of participant associated with the event
+  # @return - true if transcript state event was fired
+  sendCallTranscriptEntryEventDebug(
+    callId: ID!
+    type: String!
+    text: String
+    speakerId: String
+    roomId: String
+  ): Boolean!
+  # @param callId - teamsCallId of call to toggle local mute for
+  # @return - call that was muted
+  toggleDebugLocalMute(callId: ID!): Call
+  # @param callId - teamsCallId of call to toggle local mute for
+  # @param speakerHWMuted - toggle speaker mute
+  # @return - true
+  toggleDebugMuteSpeaker(callId: ID!, speakerHWMuted: Boolean): Boolean
+  # @param callId - callId participant is in
+  # @param participantId - participant to remove
+  # @return - removed participant
+  removeDebugParticipant(callId: ID!, participantId: ID!): Participant
+  # @return - fake debug suggested used
+  addDebugSuggestedUser(callId: ID!): User!
+  # @param callId - callId participant is in
+  # @return - fake breakout rooms
+  createDebugBreakoutRooms(callId: ID!): [BreakoutRoom]
+  # @param callId - callId participant is in
+  # @param participantId - participant to toggle video for
+  # @param streamId - id of the video stream (useful for specific use cases like Plaza Room Participant
+  # (can has up to 5 video streams)), that must be toggled
+  # @return - toggled stream
+  toggleDebugVideo(
+    callId: ID!
+    participantId: ID!
+    streamId: Int
+  ): ParticipantStream
+  # @param callId - callId participant is in
+  # @param participantId - participant to toggle screen sharing for
+  # @return - toggled stream
+  toggleDebugScreenShare(callId: ID!, participantId: ID!): ParticipantStream
+  # @param call - call fields to update
+  # @return - updated call
+  updateDebugParticipant(
+    callId: ID!
+    participant: ParticipantUpdate!
+  ): Participant
+  # @param callId - callId for current call
+  # @param selectedView - View that user has selected
+  # @return - Boolean
+  triggerDebugCallingScreenGalleryTypeChange(
+    callId: ID!
+    selectedView: CallingScreenGalleryType!
+  ): Boolean
+  # @param callId - callId for current call
+  # @param isEnabled - determines if cortana is enabled
+  # @param isVisible - determines if cortana toggle button is visible
+  # @return - Boolean
+  updateDebugCortanaToggleButton(
+    callId: ID!
+    isEnabled: Boolean!
+    isVisible: Boolean!
+  ): Boolean
+  updateDebugPinParticipantFromOutside(callId: ID!, participantId: ID!): Boolean
+  # @param callId - callId for current call
+  # @param framesinkBuffer - framesink buffer name
+  # @return - Boolean
+  updateDebugContentCameraSharing(
+    callId: ID!
+    frameSinkBufferName: String!
+  ): Boolean
+  updateDebugMeetingRoomRemoteSelectedLayoutChanged(
+    callId: ID!
+    selectedLayout: MeetingRoomRemoteControlLayoutType!
+  ): Boolean
+  updateDebugSwapScreensButtonState(
+    callId: ID!
+    isVisible: Boolean!
+    isEnabled: Boolean!
+  ): Boolean
+  # @param callId - callId for current call
+  # @param availableDevices - list of available devices
+  # @return - Boolean
+  updateDebugContentCameraState(
+    callId: ID!
+    availableDevices: [ContentCameraType!]!
+  ): Boolean
+  # @param participantId - ID of participant
+  # @return - voice level
+  toggleVoiceLevel(callId: ID!, participantId: ID!): Int!
+  # @param id - call id to stop
+  # @return - call
+  stopDebugCall(id: ID!): Call
+  # @param id - call id to stop spotlight self
+  # @return - call
+  stopSpotlightSelfDebugCall(id: ID!): Call
+  # @param callId - id of call to hold/resume
+  # @return - call
+  toggleHoldDebugCall(id: ID!): Call
+  # saves a copy of a message to be deleted in cache
+  # @param id - message id
+  # @return - DeletedMessage
+  saveDeletedMessage(messageId: ID!): DeletedMessage
+  # restores a deleted message from cache
+  # @param id - message id
+  # @return - Message
+  restoreDeletedMessage(messageId: ID!): Message
+  # sets devices list
+  # @param newDeviceList - new device list
+  # @return - device list after update
+  setDebugDevicesList(newDeviceList: DeviceListInput!): DeviceList!
+  # sets debug calling quality feedback
+  # @param newCallQuestionnaire - new calling quality feedback
+  # @return - calling quality feedback after update
+  setDebugCallingQualityFeedback(
+    callId: ID!
+    newCallQuestionnaire: QuestionnaireInput!
+  ): Questionnaire!
+  # sets new prejoin state
+  # @param callingIntentId - calling intet id
+  # @param newState - new state
+  # @return - state after update
+  setPrejoinState(
+    callingIntentId: ID!
+    newState: PrejoinStateUpdate!
+  ): PrejoinState
+  # Sets the currently selected branding theme
+  updateMeetingBrandingInfoCache(id: ID!, brandAccentColor: String!): Boolean!
+  setAnonymousDisplayName(displayName: String!): Boolean!
+  # Set response value send by acceptStreamPermissionsDebug
+  # @param True for success, false for error
+  # @return New response for acceptStreamPermissionsDebug
+  setAcceptStreamPermissionsDebugResponse(response: Boolean!): Boolean!
+  # Set value for acknowledged in streamPermissionsDebug query
+  # @param acknowledged - new value for acknowledged
+  # @return Stream permission debug values
+  setStreamPermissionsDebugAcknowledged(
+    acknowledged: Boolean!
+  ): StreamPermissionsDebug!
+  # Set value for acknowledgementRequired in streamPermissionsDebug query
+  # @param acknowledgementRequired - new value for acknowledgementRequired
+  # @return Stream permission debug values
+  setStreamPermissionsDebugAcknowledgedRequired(
+    acknowledgementRequired: Boolean!
+  ): StreamPermissionsDebug!
+  # Triggers SubscribedCallChanged event for debugging purposes
+  # @param callId - id of the call
+  # @param newState - mocked event payload
+  triggerSubscribedCallChangedDebugEvent(
+    callId: ID!
+    newState: SubscribedCallChangeDebugUpdate!
+  ): SubscribedCallChangeDebug!
+  # sets LPC initialization state
+  # @param result of initialization from LPC bootstrapper
+  # @returns updated LPC state
+  setLpcState(newLpcState: LpcStateUpdate!): LpcState
+  # returns the untranslated Message content from cache
+  # @param id - message id
+  # @return - boolean
+  untranslateMessage(messageId: ID!): String
+  # @param windowId - id of window to remove
+  # @return removed window
+  removeWindow(windowId: ID!): Window
+  # Update file Permission of a file
+  # @param updateFilePermissionInput - parameters to update permission of a file
+  # @return boolean - true if operation was successful
+  updateFilePermission(
+    updateFilePermissionInput: UpdateFilePermissionInput
+  ): Boolean
+  # Updates file permission scope of a file in FileUpload entry
+  # @param updatePermissionScopeInput - parameters to update scope of a file
+  # @return boolean - true if operation was successful
+  updatePermissionScopeInFileUpload(
+    updatePermissionScopeInput: UpdatePermissionScopeInput
+  ): Boolean
+  # Update Q&A feed status information
+  # @param id - Unique identifier for the Q&A session
+  # @param isQnaFeedLoaded - Flag indicating if Q&A feed has loaded
+  # @param hasNewMessages - Flag indicating if Q&A feed has new message
+  # @return boolean - Feed load status value
+  updateBroadcastQnaFeedStatus(
+    id: ID!
+    isQnaFeedLoaded: Boolean
+    hasNewMessages: Boolean
+  ): BroadcastQnaFeedStatus!
+  # Update broadcast attendee captions visivbility
+  # @param id - broadcast id
+  # @return boolean - Flag indicating the updated captions visibility value
+  updateAttendeeCaptionsVisibility(broadcastId: ID!): Boolean!
+  # Sets byod toggle value for given teamsCallId
+  setByodState(teamsCallId: ID!, newByodState: ByodStateInput!): ByodState!
+  # Sets the calling screen status got the given callingIntentId
+  # @param teamsCallId - teamsCallId of the call
+  # @param state - new state for the calling screen status object
+  setCallingScreenStatus(
+    teamsCallId: ID!
+    state: CallingScreenStatusInput!
+  ): CallingScreenStatus
+  # Sets the videoScanType for call with teamsCallId
+  # @param teamsCallId - teamsCallId of the call
+  # @param videoScanTypeInput - new videoScanType for call
+  setVideoScanType(
+    teamsCallId: ID!
+    videoScanTypeInput: VideoScanTypeInput!
+  ): VideoScanTypeResponse!
+  # Sets the calling screen layout got the given callingIntentId
+  # @param teamsCallId - teamsCallId of the call
+  # @param state - new state for the calling screen layout object
+  setCallingScreenLayout(
+    teamsCallId: ID!
+    layout: CallingScreenLayoutInput
+  ): CallingScreenLayout!
+  # Marks calling screen (stage) as ready and loaded, used for inter-slot communication
+  # @param teamsCallId - teamsCallId of the call (call.id)
+  setIsCallingScreenReady(teamsCallId: ID!): Boolean!
+  # Update the chat disabled context.
+  # @param convId: Conversation Id
+  # @param isUIDisabled: Indicates that the chat is disabled.
+  # @param disabledReason: Reason for disabling the chat.
+  # @param extendedData: Structured string that holds additional information based on disabledReason.
+  # @return ChatDisabledContextResponse: Mutation response.
+  updateChatDisabledContext(
+    convId: ID!
+    isUIDisabled: Boolean!
+    disabledReason: ChatDisabledContextReason
+    extendedData: String
+  ): ChatDisabledContextResponse
+  # Set a message to be quoted
+  # @param convId - the id for the conversation the reply is being added to
+  # @param quotedReply - QuotedReplyInput for message id to be quoted
+  setQuotedReply(convId: String!, quotedReply: QuotedReplyInput!): Boolean!
+  # Reset QuotedReply data after a message has been quoted
+  # @param convId - the id for the conversation the reply is being reset from
+  resetQuotedReply(convId: String!): Boolean!
+  # Save message for forward card in cache
+  # @param convId - the id for the conversation the forward card is being added to
+  # @param message - Message to be used for forward card
+  saveForwardCard(convId: String!, message: ForwardMessageInput!): Boolean!
+  # Delete message used in forward card from the cache
+  # @param convId - the id for the conversation the forward card is being deleted from
+  deleteForwardCard(convId: String!): Boolean!
+  # @param id - the hardware out device id
+  # @param callId - the callId of current call
+  # @param format - the hardware out device format, with resolution and frame rate
+  # @param participantId - the participantId of the source participant
+  # @param videoType - the videoType of the video source, video | screenSharing
+  # @param participantStreamId - the participantStreamId of the video source
+  # @param localStream - if it is a local stream
+  # @param displayWaterMark - On | Off | Fade
+  # @returns - true or false
+  sendToDebugHardwareOutDevice(
+    id: ID!
+    callId: ID!
+    format: String!
+    participantId: ID
+    videoType: StreamType
+    participantStreamId: Int
+    localStream: Boolean
+    displayWaterMark: DisplayWaterMark
+  ): [HardwareOutDevice!]
+  # @param id - the id of the device
+  # @returns - True if the operation is successful.
+  stopDebugHardwareOutDevice(id: ID!): [HardwareOutDevice!]
+  # Updates broadcast caption font size
+  # @param teamsCallId - teamsCallId for the current meeting
+  # @param fontSize - broadcast font size type
+  updateCaptionFontSize(
+    teamsCallId: ID!
+    fontSize: CaptionFontSizeType!
+  ): CaptionFontSizeType!
+  # Updates broadcast layout
+  # @param teamsCallId - teamsCallId for the current meeting
+  # @param layoutType - broadcast layout type
+  # @return BroadcastLayout - layout with sources
+  updateBroadcastLayout(
+    teamsCallId: ID!
+    layoutType: BroadcastLayoutType!
+  ): BroadcastLayout!
+  # Selects the layout section in broadcast stage
+  # @param teamsCallId - teamsCallId for the current meeting
+  # @param sectionId - unique Id identifying the section of the broadcast layout (left/right)
+  # @return BroadcastLayout - broadcast layout with selected section
+  selectBroadcastSection(teamsCallId: ID!, sectionId: ID!): BroadcastLayout!
+  # Sets the selected source in active section of broadcast stage layout
+  # @param teamsCallId - teamsCallId for the current meeting
+  # @param source - broadcast source
+  # @return BroadcastLayout - broadcast layout with selected source
+  setBroadcastActiveSectionSource(
+    teamsCallId: ID!
+    source: BroadcastClientSourceInput!
+  ): BroadcastLayout!
+  # Clears the source in selected section of broadcast stage layout
+  # @param teamsCallId - teamsCallId for the current meeting
+  # @param sectionId - unique Id identifying the section of the broadcast layout (single/left/right)
+  # @return BroadcastLayout - broadcast layout with selected source
+  clearBroadcastSource(teamsCallId: ID!, sectionId: ID!): BroadcastLayout!
+  # Updates the current state of the extended entity container
+  # @param containerState - the state of the current extended container
+  updateExtendedEntityContainerState(
+    containerState: ExtendedContainerState!
+  ): Boolean!
+  # Toggles the Apps refetch state
+  toggleAppsRefetch(convId: ID!): Boolean!
+  # Sets the fetch policy for installedApps query so next request uses the cache
+  setPlatformAppsFetchPolicy(input: [PlatformAppsFetchPolicyInput!]!): Boolean!
+  updateAllPlatformAppsFetchPolicies(
+    fetchSource: PlatformAppsFetchSource!
+  ): Boolean!
+  # Create mock broadcast data for debug
+  # @param type - type of the debug broadcast
+  # @return DebugBroadcast - details of the created broadcast
+  createDebugBroadcast(type: DebugBroadcastType): DebugBroadcast!
+  # updates the select media api result
+  updateSelectMediaResult(input: SelectMediaResultInput!): Boolean!
+  # resets the select media api result
+  resetSelectMediaResult: Boolean!
+  # updates the view images api result
+  updateViewImagesResult(input: ViewImagesResultInput!): Boolean!
+  # resets the view images media api result
+  resetViewImagesResult: Boolean!
+  # Updates the task module result state
+  updateTaskModuleResult(
+    taskModuleId: ID!
+    draftId: String
+    conversationId: String
+    reason: TaskModuleClosedReason!
+    entryPoint: TaskModuleEntryPoints!
+    card: PlatformCardInput
+    adaptiveCardTabResult: [PlatformCardInput]
+    text: String
+  ): Boolean!
+  # Reset task module result data after it has been consumed
+  resetTaskModuleResult: Boolean!
+  # Toggle myself visibiity
+  updateMyselfSettings(
+    teamsCallId: ID!
+    isMyselfHidden: Boolean!
+  ): UpdateMyselfSettings!
+  # Updates the app install state
+  updateAppDetailsResult(input: AppDetailsResultInput): Boolean!
+  # Updates the in context store installed app launch options
+  updateInContextStoreLaunchInstalledAppResult(
+    input: InContextStoreLaunchInstalledAppInput
+  ): Boolean!
+  # @param latitude - latitude to update
+  # @param longitude - longitude to update
+  # @return - updated location coordinates
+  updateMapCoordinateResult(
+    locationApiResult: MapCoordinateResultInput!
+  ): Boolean!
+  # @param response - showLocationMapLuanchState
+  updateShowLocationResult(response: String): Boolean!
+  resetShowLocationResponse: Boolean!
+  updateSelectPeoplePickerResult(
+    selectPeoplePickerResult: [SelectPeoplePickerResultInput!]!
+  ): Boolean!
+  resetMapCoordinateResult: Boolean!
+  resetSelectPeoplePickerResult: Boolean!
+  # Add FileUpload to the cache
+  # @param fileToAdd containing FileUpload properties which needs to be added in the cache
+  addFileUpload(fileToAdd: AddFileUploadInput!): Boolean!
+  # As apollo cache doesn't support removing a file from the cache,
+  # so it just removes the given file from currentFiles query
+  # @param fileToRemove FileUpload instance which needs to be removed from the cache
+  removeFileUpload(input: RemoveFileUploadInput!): Boolean!
+  # Sets the device's blurring capabilities
+  # @params a flag whether the device supports it
+  setDebugDeviceBlurringCapability(state: Boolean): Boolean!
+  # Sets video background images for tests
+  # @params the count of background images
+  setDebugVideoBackgroundImages(imageCount: Int!): Boolean!
+  # Triggers a mocked BluetoothStateChanged event with mocked BLE state
+  # @param the mocked payload of the event
+  triggerBluetoothStateChangedDebugEvent(
+    input: TriggerBluetoothStateChangedDebugInput!
+  ): Boolean!
+  triggerRaiseHandStateChangedEvent(
+    input: TriggerRaiseHandStateChangedEventInput!
+  ): Boolean!
+  # Update the chat compose state
+  # @param id - the compose id
+  # @param isExpanded - Is the compose box expanded?
+  updateComposeState(id: ID!, isExpanded: Boolean!): ComposeMessageState
+  updateMessagePaneScrolledToStartState(
+    id: ID!
+    isScrolledToStart: Boolean!
+  ): MessagePaneScrolledToStartState
+  # @param callingIntentId - calling intent id
+  # @param effect - the video effect
+  toggleDebugVideoEffect(callingIntentId: ID!, effect: VideoEffect!): Boolean!
+  # update event details for webinar
+  # @return the webinar id
+  updateWebinarDetails(
+    webinarId: ID!
+    detailsInput: WebinarDetailsInput!
+  ): Webinar!
+  # update speakers for webinar
+  # @return the webinar id
+  updateWebinarSpeakers(
+    webinarId: ID!
+    speakersInput: [WebinarSpeakerInput!]!
+  ): Webinar!
+  # update questions for webinar
+  # @return the webinar id
+  updateWebinarQuestions(
+    webinarId: ID!
+    questionsInput: [WebinarQuestionInput!]!
+  ): Webinar!
+  # update unified data for webinar
+  # @return the webinar id
+  updateUnifiedWebinarData(
+    webinarId: ID!
+    unifiedWebinarInput: WebinarUnifiedDataInput!
+  ): Webinar!
+  # Set a fluid message to be loaded
+  # @param fluidMessage - FluidMessageInput for fluid message to be loaded
+  setFluidMessage(fluidMessage: FluidMessageInput!, remove: Boolean): Boolean!
+  # Set a JSON stringified array of all available Loop components to the local cache.
+  # @param locale the locale which the entries are localized.
+  # @param entries the JSON string that contains all Loop components.
+  # @return true if the JSON string has been stored successfully into the cache.
+  setFluidManifestEntries(locale: String!, entries: String!): Boolean!
+  # Adds or removes pending mentions for a particular Fluid component
+  # @param componentHash key derived from the component share link
+  # @param pendingMention pending Fluid at-mention input
+  # @param remove boolean for whether this is an insertion or removal
+  updateFluidPendingMentions(
+    componentHash: ID!
+    pendingMention: FluidPendingMentionInput!
+    remove: Boolean
+  ): Boolean!
+  clearFluidPendingMentions(componentHash: ID!): Boolean!
+  # lock/unlock meeting
+  # @param isLocked - required state of the meeting lock
+  # @return Boolean as graphql doesn't support void types
+  updateMeetingLockDebug(teamsCallId: ID!, isLocked: Boolean!): Boolean!
+  # sends a signal when a tab has been added to a thread
+  # @param id - current thread Id
+  # @param tabId - id of tab loaded at tab panel
+  # @return Boolean
+  updateTabConfigurationResult(id: String!, tabId: ID!): Boolean!
+  # sends a signal when a tab has been deleted from a thread
+  # @param threadId - thread Id
+  # @param channelMeetingMessageId - optional channel meeting message Id
+  # @param tabId - tab Id
+  # @returns Boolean
+  updateTabDeletionResult(
+    threadId: String!
+    channelMeetingMessageId: String
+    tabId: String!
+  ): Boolean!
+  # update webinar image for webinar
+  # @return the webinar id
+  updateWebinarImage(
+    webinarId: ID!
+    webinarImageInput: WebinarImageInput!
+  ): Webinar!
+  # update message to parent result
+  # @param appId - current app Id
+  # @param message - message sent to parent tab
+  # @return Boolean
+  updateMessageToParentResult(appId: ID!, message: String!): Boolean!
+  # update message to child result
+  # @param appId - current app Id
+  # @param message - message sent to child tab
+  # @return Boolean
+  updateMessageToChildResult(appId: ID!, message: String!): Boolean!
+  # update change settings status to cache
+  # @param appId - current app Id
+  # @param status - true
+  updateAppButtonSettings(appId: ID!, action: String!): Boolean!
+  updateChangeSettings(
+    id: ID!
+    status: Boolean!
+    appId: String
+    tabId: String
+  ): Boolean!
+  # trigger change settings to cache
+  # @param appId - current app Id
+  # @param message - guid
+  triggerChangeSettings(
+    id: ID!
+    message: String!
+    appId: String
+    tabId: String
+  ): Boolean!
+  # set current selected video filter
+  # @param newVideoFilter - new video filter
+  # @return updated VideoFilter
+  updateSelectedBackgroundsInfo(
+    newBackgroundsInfo: BackgroundsInfoUpdate!
+  ): BackgroundsInfo!
+  # update active video effects
+  # @param updateActiveVideoEffectsVariables - update active video effects variables
+  # @return true if update succeed
+  updateActiveVideoEffects(
+    updateActiveVideoEffectsVariables: UpdateActiveVideoEffectsVariables!
+  ): Boolean!
+  # set current install info
+  # @param updateCurrentInstallInfoVariables - update install info variables
+  # @return true if update succeed
+  updateVideoEffectsCurrentInfo(
+    updateVideoEffectsCurrentInfoVariables: UpdateVideoEffectsCurrentInfoVariables!
+  ): Boolean!
+  # set shouldKeepPreviewWindowInSidePanelOpen
+  # @return if the preview window should be kept
+  setShouldKeepPreviewWindowInSidePanelOpen(keep: Boolean!): Boolean!
+  # set shouldReloadVideoApp
+  # @return if need to reload video app
+  setShouldReloadVideoApp(reload: Boolean!): Boolean!
+  # set shouldShowVideoApp
+  # @return if the content is show
+  setShouldShowVideoApp(show: Boolean!): Boolean!
+  # set shouldShowVideoEffectsPreview
+  # @return if the preview is on
+  setShouldShowVideoEffectsPreview(show: Boolean!): Boolean!
+  # set shouldRefreshVideoFilters
+  # @return if the content is show
+  setShouldRefreshVideoFilters(shouldRefresh: Boolean!): Boolean!
+  # set isTurningOnVideoFromPreview
+  # @return is turning on view from preview
+  setIsTurningOnVideoFromPreview(value: Boolean!): Boolean!
+  # @param id - id of the utterance
+  # @param text - utterance text
+  # @param isFinal - user is finished speaking
+  # @param userId - user speaking
+  sendClosedCaptionsEntryEventDebug(
+    id: ID!
+    text: String
+    isFinal: Boolean!
+    userId: String
+  ): Boolean!
+  # @param closedCaptionsStatus - state of captions bottom
+  # @param spokenLanguage - language being spokenLanguage
+  # @param tracks - array of tracks provided by the bot
+  sendClosedCaptionsStatusEventDebug(
+    closedCaptionsStatus: CallClosedCaptionsStatus!
+    spokenLanguage: String!
+    tracks: [ClosedCaptionsTextTrackInput!]!
+    selectedTrack: ClosedCaptionsTextTrackInput
+    usingTrack: ClosedCaptionsTextTrackInput
+  ): Boolean!
+
+  # @param isStart - is the event start or end
+  # @param id - id of the entry
+  # @param text - text of the event
+  # @param isFinal - is the event final
+  # @param userId - speaking user id
+  setDebugClosedCaptionsEvent(
+    isStart: Boolean
+    id: ID
+    text: String
+    isFinal: Boolean
+    userId: String
+  ): DebugClosedCaptionsEvent
+
+  # Sets the pinned participants ids given the teams call id
+  setPinnedParticipantIds(
+    teamsCallId: ID!
+    participantIds: PinnedParticipantIdsInput
+  ): PinnedParticipantIds!
+
+  # sets the video app post message event
+  setVideoAppPostMessageEvent(
+    videoAppPostMessageEvent: VideoAppPostMessageEvent!
+  ): VideoAppPostMessageEvent!
+
+  # sets the avatar app post message event
+  setAvatarAppPostMessageEvent(
+    avatarAppPostMessageEvent: VideoAppPostMessageEvent!
+  ): VideoAppPostMessageEvent!
+
+  #sets the videoNotification
+  setVideoNotification(
+    videoNotificationInput: VideoNotificationInput!
+  ): VideoNotification!
+
+  # sets the avatar error notification
+  setAvatarErrorNotification(
+    avatarErrorNotificationInput: AvatarErrorNotificationInput!
+  ): AvatarErrorNotification!
+
+  # sets the avatar quick picker error notification
+  setAvatarQuickPickerErrorNotification(
+    avatarQuickPickerErrorNotificationInput: AvatarErrorNotificationInput!
+  ): AvatarErrorNotification!
+
+  # sets whether it should set avatar renderer timeout
+  # @param shouldSet - if it should set
+  setShouldSetAvatarRendererTimeout(shouldSet: Boolean!): Boolean!
+
+  # Updates the custom app upload state
+  updateCustomAppUploadResult(input: CustomAppUploadResultInput): Boolean!
+
+  # Set a Smart reply file suggestion to be shared / added to compose
+  # @param convId - the id for the conversation the file is being added to
+  # @param fileSuggestion - SmartReplyFileSuggestionInput for the file to be shared
+  setSmartReplyFileSuggestion(
+    convId: String!
+    fileSuggestion: SmartReplyFileSuggestionInput!
+  ): Boolean!
+
+  # Set last selected camera ID
+  # @param deviceId - the id for the selected camera
+  setLastSelectedCameraId(deviceId: String!): String!
+
+  # Reset SmartReply file suggestion data after a file has been shared
+  # @param convId - the id for the conversation the file is being reset from
+  resetSmartReplyFileSuggestion(convId: String!): Boolean!
+
+  # Updates the webhookToken string when an outgoing webhook is created
+  updateWebhookConfirmationResult(input: String!): Boolean!
+
+  #returns - payment details cached
+  # @param id - the id corresponding to a payment request
+  # @param paymentDetails - paymentDetails to be cached
+  updatePaymentDetailsInCache(
+    eventId: ID!
+    paymentDetails: PaymentDetailsInput!
+  ): PaymentDetails!
+
+  # updates the archive team data
+  updateArchiveTeamInfo(info: ArchiveTeamInput): Boolean!
+
+  # set avatar data
+  # @param newAvatarInfo - avatar data
+  # @return updated avatar data
+  updateAvatarInfo(newAvatarInfo: AvatarInfoInput!): AvatarPayload!
+
+  # set current selected avatar and background
+  # @param selectedAvatarInfo - selected avatar SelectedAvatarInfo
+  # @return updated SelectedAvatarInfo
+  updateSelectedAvatarInfo(
+    selectedAvatarInfo: SelectedAvatarInfoInput!
+  ): SelectedAvatarInfo!
+  # set is avatar app loaded
+  # @return if app is loaded
+  setIsAvatarAppLoaded(isAppLoaded: Boolean!): Boolean!
+  # Mutation called by meeting organizers to end staging room experience
+  # and start the meeting.
+  # @param teamsCallId - Call ID.
+  # @return Boolean as graphql doesn't support void types
+  meetingDebugGoLive(teamsCallId: ID!): Boolean!
+  # Based on the sets the outcome of meetingDebugGoLive mutation
+  # @param shouldFail - The outcome of meetingDebugLive.
+  # @return Boolean as graphql doesn't support void types
+  setDebugStageRoomOutcome(shouldFail: Boolean!): Boolean!
+
+  setAppDevicePermissionsUpdated(
+    input: SetAppDevicePermissionsUpdatedInput!
+  ): AppDevicePermissionsUpdated
+
+  # set shouldShowPopupPreview
+  # @return if the preview is on
+  setShouldShowPopupPreview(show: Boolean!): Boolean!
+
+  # set setShouldAvatarMenuItemSelected
+  # @retrn if the avatar menu item should be selected
+  setShouldAvatarMenuItemSelected(shouldSelect: Boolean!): Boolean!
+
+  # Adds blocking scheduling form tasks
+  # @param input: Variables for adding scheduling form blocking task.
+  addSchedulingFormBlockingTask(
+    input: AddSchedulingFormBlockingTaskInput!
+  ): SchedulingFormTask
+
+  # Updates state of scheduling form task.
+  # @param input: Variables for updating scheduling from blocking task.
+  updateSchedulingFormBlockingTask(
+    input: UpdateSchedulingFormBlockingTaskInput!
+  ): SchedulingFormTask
+
+  # Removes scheduling form pending task.
+  # @param input - Variables for removing scheduling form blocking task.
+  removeSchedulingFormBlockingTask(
+    input: RemoveSchedulingFormBlockingTaskInput!
+  ): SchedulingFormTask
+
+  # Indicator for all slots that an action to close form has been triggered.
+  # @param input: Variables for setting type of scheduling form terminating action.
+  setSchedulingFormTerminatingAction(
+    input: SetSchedulingFormTerminatingActionInput!
+  ): Boolean!
+
+  # Sets active tab in scheduling form.
+  # @param input: Variables for setting active tab.
+  setSchedulingFormActiveTab(
+    input: SetSchedulingFormActiveTabInput
+  ): SchedulingFormTab
+
+  # update new calling state
+  # @param newState: new state
+  # @return - true if state updated
+  updateCallingState(newState: CurrentCallingState!): Boolean!
+
+  # Adds cached platform apps to shared apollo cache
+  # @param input - apps information and identifier for the local app cache that is sending mutation
+  # @return Boolean - fire-and-forget mutation, will not be used
+  # Of type boolean since mutation is called and caller does not use result
+  addSharedPlatformCachedApps(input: CachedAppListInput!): Boolean!
+
+  # Removes cached platform apps from shared apollo cache
+  # @param input - apps information and identifier for the local app cache that is sending mutation
+  # @return Boolean - fire-and-forget mutation, will not be used
+  # Of type boolean since mutation is called and caller does not use result
+  removeSharedPlatformCachedApps(input: CachedAppListInput!): Boolean!
+
+  # Updates cached platform apps in shared apollo cache
+  # @param input - apps information and identifier for the local app cache that is sending mutation
+  # @return Boolean - fire-and-forget mutation, will not be used
+  # Of type boolean since mutation is called and caller does not use result
+  updateSharedPlatformCachedApps(input: CachedAppListInput!): Boolean!
+
+  # set localFrameContext data
+  setLocalFrameContext(
+    localFrameContext: LocalFrameContextInput!
+  ): LocalFrameContext
+  # resets the localFrameContext
+  resetLocalFrameContext: LocalFrameContext
+
+  # set backButtonHandlerState data
+  setBackButtonHandlerState(
+    backButtonHandlerState: BackButtonHandlerStateInput!
+  ): BackButtonHandlerState
+  # resets the backButtonHandlerState
+  resetBackButtonHandlerState: BackButtonHandlerState
+  # sets the virtual event's action triggered by the user.
+  # @param input: Variables for setting type of virtual event action.
+  # @returns updated virtual event action.
+  setVirtualEventAction(input: SetVirtualEventActionInput!): VirtualEventAction
+
+  # post meeting has started message to MeetingBot backend
+  # @param absentAttendees - ids of absent attendees
+  # @param hasRecordingStarted - the recording status
+  # @param meetingId - the id of the meeting
+  # @param isForced - force to send meetingStart scenario even if it's already sent
+  postMeetingStarted(
+    absentAttendees: [String]
+    hasRecordingStarted: Boolean!
+    meetingId: String!
+    isForced: Boolean
+  ): String!
+
+  # try to start the MeetingBot publisher to enable client triggering
+  # @returns - if the start action succeed
+  tryStartMeetingBotPublisher: Boolean
+
+  # try to send action status to MeetingBot service
+  # the below params represent the current bot status.
+  sendActionStatus(
+    botAction: CommandActions!
+    isActionSucess: Boolean!
+    nextMeetingName: String
+  ): Boolean
+
+  # post running late notification to enable client triggering running late smart action
+  # below params should be aliagn with current meeting
+  sendRunningLateForNextMeetingNotification(
+    iCalUID: String
+    subject: String
+    objectId: String
+    conversationId: String
+  ): Boolean
+
+  # send message to specific conversation
+  # @param conversationId - conversationId of next meeting
+  # @param message - message want to be sent
+  # @param files - file list want to sent
+  sendMessageToConversation(
+    conversationId: String!
+    message: String!
+    files: [MeetingBotFileInput]
+  ): Boolean
+
+  # Send meeting object id to a Teams chat service
+  # @param meetingObjectId - id of meeting
+  sendMeetingObjectId(meetingObjectId: ID!): Boolean!
+
+  # Trigger a chat command event in MeetingBot client
+  # @param conversationId - id of meeting chat
+  # @param botAction - action type
+  # @param actionId - id of the action triggered
+  triggerBotAction(
+    conversationId: ID!
+    botAction: CommandActions!
+    actionId: ID!
+  ): Boolean!
+
+  # post greeting notification to MeetingBot service
+  # @param input: Variables for posting greeting nofification.
+  # @returns updated virtual event action.
+  postGreetingToMeetingBot(input: PostGreetingToMeetingBotInput!): Boolean!
+
+  # remove calendar event
+  # @param eventId - Id of calendar event
+  removeCalendarEvent(eventId: String!): String
+
+  # send MeetingBot message
+  # @param text - message to send
+  # @param conversationId - conversationId of MeetingBot
+  # @returns - true if successful
+  sendMeetingBotMessage(text: String!, conversationId: String): Boolean!
+
+  # remove compositor region from list of regions for calling intent
+  # @param callingIntentId - calling intent id
+  # @param compositorId - compositor id for that region is removed
+  # @returns - regions for calling intent
+  removeCompositorRegion(callingIntentId: ID!, compositorId: ID!): [Region!]!
+
+  # add a new compositor region for calling intent
+  # @param callingIntentId - calling intent id
+  # @param region - compositor region
+  # @returns - regions for calling intent
+  setCompositorRegion(callingIntentId: ID!, region: RegionInput!): [Region!]!
+
+  # update virtual event scheduling form data
+  # @param virtualEventSchedulingFormDataInput - input scheduling form data
+  # @returns - updated virtual event scheduling form data
+  updateVirtualEventSchedulingFormData(
+    virtualEventSchedulingFormDataInput: VirtualEventSchedulingFormDataInput!
+  ): VirtualEventSchedulingFormData
+
+  # send usage report to meeting bot
+  # @returns - true if successful
+  reportUsageToMeetingBot: Boolean!
+
+  # set the avatar app availability info
+  # @param input: Variables for setting app availability info
+  # @returns updated app availability info
+  setAvatarAppAvailabilityInfo(
+    availabilityInfo: AvatarAppAvailabilityInfoInput!
+  ): AvatarAppAvailabilityInfo!
+  # @returns - true if successful
+  setIsAvatarMRULoaded(isLoaded: Boolean!): Boolean!
+  # set MeetingCollabOpen @return true if successful
+  setMeetingCollab(isMeetingCollabOpen: Boolean!): Boolean!
+  # @return true if successful
+  toggleMeetingCollab: Boolean!
+  # @return true if stop sharing is triggered on stage,else false
+  stopSharingTriggeredOnStage(isStopSharingTriggeredOnStage: Boolean!): Boolean!
+  # @returns - true if successful
+  setAppsBadgeRead(isRead: Boolean!): Boolean!
+  # set the immersive view mode app availability info
+  # @param input: input values for the immersive view mode app info
+  # @returns updated app availability info
+  setImmersiveViewModeAppAvailabilityInfo(
+    availabilityInfo: ImmersiveViewModeAppAvailabilityInfoInput!
+  ): ImmersiveViewModeAppAvailabilityInfo
+
+  # creates the notifications window
+  # @returns true if successful and false otherwise.
+  createNotificationsWindow: Boolean!
+
+  # removes the notifications window
+  # @returns true if successful and false otherwise.
+  removeNotificationsWindow: Boolean!
+
+  # Set whether or not to show hard-delete connected calendar surface dialog
+  # @param showDialog: whether to show dialog
+  # @returns - true if successful
+  setShouldShowHardDeleteConnectedCalendarSurfaceDialog(
+    showDialog: Boolean!
+  ): Boolean!
+}
+
+# type Subscription {
+# }
+
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE
+
+type CachedAppList {
+  id: ID!
+  lastUpdatedSourceWindow: String!
+  apps: [CachedApp!]!
+}
+
+input CachedAppListInput {
+  lastUpdatedSourceWindow: String!
+  apps: [CachedAppInput!]!
+}
+
+type CachedApp {
+  globalAppId: String!
+  isCachedAndHidden: Boolean!
+  lastLoaded: Float
+  appId: String
+  appName: String
+}
+
+input CachedAppInput {
+  globalAppId: String!
+  isCachedAndHidden: Boolean!
+  lastLoaded: Float
+  appId: String
+  appName: String
+}
+
+input AppDetailsResultInput {
+  appInstallId: ID!
+  appId: ID!
+  isAppInstalled: Boolean!
+  errorCode: String
+}
+
+input InContextStoreLaunchInstalledAppInput {
+  id: ID!
+  appId: ID!
+  capability: String!
+  appDisplayName: String
+  draftId: String
+}
+
+enum CustomAppType {
+  sideload
+  tenant
+  staging
+}
+
+type SchedulingFormTask {
+  id: ID!
+  type: SchedulingFormTaskType!
+  state: SchedulingFormTaskState!
+}
+
+input SchedulingFormTaskInput {
+  type: SchedulingFormTaskType!
+  state: SchedulingFormTaskState!
+}
+
+enum SchedulingFormTaskType {
+  MeetingNotesAddition
+}
+
+enum SchedulingFormTaskState {
+  # Task has not started.
+  NotStarted
+  # Task is active.
+  Active
+  # Task has succeeded.
+  Resolved
+  # Task has failed.
+  Rejected
+  # Task has timed out.
+  Timeout
+  # Task has been abandoned. E.g., User cancelling an action.
+  Abandoned
+}
+
+input RegionInput {
+  compositorId: ID!
+  x: Int!
+  y: Int!
+  width: Int!
+  height: Int!
+}
+
+type Region {
+  compositorId: ID!
+  x: Int!
+  y: Int!
+  width: Int!
+  height: Int!
+}
+
+type BossConsumptionHorizon {
+  originalArrivalTime: String
+}
+
+input AddSchedulingFormBlockingTaskInput {
+  task: SchedulingFormTaskInput!
+}
+
+input UpdateSchedulingFormBlockingTaskInput {
+  type: SchedulingFormTaskType!
+  state: SchedulingFormTaskState!
+}
+
+input MeetingRoomFrontOfRoomCallPanelsStateInput {
+  rightPanel: MeetingRoomFrontOfRoomCallPanel
+}
+
+enum MeetingRoomFrontOfRoomCallPanel {
+  Chat
+}
+
+type MeetingRoomFrontOfRoomCallPanelsState {
+  id: ID!
+  rightPanel: MeetingRoomFrontOfRoomCallPanel
+}
+
+input SetSchedulingFormActiveTabInput {
+  id: ID!
+  type: String!
+}
+
+input SetSchedulingFormTerminatingActionInput {
+  type: SchedulingFormTerminatingActionType
+}
+
+input RemoveSchedulingFormBlockingTaskInput {
+  type: SchedulingFormTaskType!
+}
+
+enum SchedulingFormTerminatingActionType {
+  Save
+}
+
+input ArchiveTeamInput {
+  archiveSharepointSite: Boolean
+}
+
+input CustomAppUploadResultInput {
+  customAppType: CustomAppType!
+}
+
+input DebugCallUpdate {
+  id: ID!
+  state: Int
+  isMuted: Boolean
+  isVideoOn: Boolean
+  isScreenSharingOn: Boolean
+  isHandRaised: Boolean
+  isSpotlighted: Boolean
+  isVideoLive: Boolean
+  isScreenShareLive: Boolean
+  broadcastMeeting: DebugBroadcastMeeting
+  callEndDiagnosticsInfo: DebugCallEndDiagnosticsInfo
+  meetingRole: String
+  meetingDetails: DebugMeetingDetails
+  emergencyCallInfo: DebugEmergencyCallInfo
+  stagingRoomProperties: DebugStagingRoomProperties
+  brandingInfo: DebugMeetingBrandingInfo
+}
+
+input DebugMeetingBrandingInfo {
+  defaultTheme: String
+  meetingBrandingThemes: [DebugMeetingBrandingTheme!]
+}
+
+input DebugMeetingBrandingTheme {
+  identity: ID
+  displayName: String
+  enabled: Boolean!
+  brandAccentColor: String
+  logoImageLightUri: String
+  logoImageDarkUri: String
+  backgroundImageLightUri: String
+  backgroundImageDarkUri: String
+}
+
+input DebugMeetingDetails {
+  meetingCapability: DebugMeetingCapability
+}
+
+input DebugMeetingCapability {
+  lockMeeting: Boolean
+  allowMeetingReactions: Boolean
+  isHostViewModeActive: Boolean
+}
+
+input DebugCallEndDiagnosticsInfo {
+  callControllerCode: Int
+  callControllerSubCode: Int
+}
+
+input DebugEmergencyCallInfo {
+  callerNumber: String
+  callerLocation: String
+}
+
+input DebugStagingRoomProperties {
+  stagingRoomEnabled: Boolean
+  eventActive: Boolean
+}
+
+input DebugBroadcastMeeting {
+  broadcastState: DebugBroadcastState
+  commands: DebugBroadcastMeetingCommands
+}
+
+input DebugBroadcastState {
+  status: DebugBroadcastStateStatus
+}
+
+enum DebugBroadcastStateStatus {
+  NotStarted
+  Started
+  Starting
+  Stopped
+  Stopping
+}
+
+input DebugBroadcastMeetingCommands {
+  setLayout: Boolean
+  start: Boolean
+  stop: Boolean
+  updateMediaState: Boolean
+}
+
+input PinnedParticipantIdsInput {
+  participantIds: [String!]!
+}
+
+type PinnedParticipantIds {
+  id: ID!
+  participantIds: [String!]!
+}
+
+input CreateDebugCallInput {
+  isOneOnOne: Boolean
+  isMeetup: Boolean
+  isCompanionFlow: Boolean
+  conversationId: String
+  withVideo: Boolean
+  withAudio: Boolean
+  isBroadcast: Boolean
+  broadcastRole: DebugBroadcastParticipantRole
+  isBreakoutRoom: Boolean
+  existingVideoParticipants: Int
+  existingAudioParticipants: Int
+}
+
+input CreateDebugParticipants {
+  callId: ID!
+  withAudio: Int!
+  withVideo: Int!
+}
+
+enum DebugBroadcastParticipantRole {
+  Producer
+  Contributor
+  Attendee
+  None
+}
+
+enum ContentCameraType {
+  HdmiIngest
+  WhiteboardCamera
+}
+
+input JoinOptionsInput {
+  outgoingVideo: Boolean
+  outgoingAudio: Boolean
+}
+
+input CreateDebugConversationInput {
+  isOneOnOne: Boolean
+  chatSubType: Int
+}
+
+input ParticipantUpdate {
+  id: ID!
+  state: Int
+  isServerMuted: Boolean
+  isHandRaised: Boolean
+  isSpotlighted: Boolean
+  voiceLevel: Int
+  isVideoLive: Boolean
+  isScreenShareLive: Boolean
+  meetingRole: String
+}
+
+input PrejoinStateUpdate {
+  incomingAudio: Boolean
+  isPSTN: Boolean
+  roomDetails: RoomDetailsInput
+  volume: Int
+  withAudio: Boolean
+  withVideo: Boolean
+  withByod: Boolean
+  wasAutomuteTriggered: Boolean
+  wasMuteToggledByUser: Boolean
+  isAuditoriumModeEnabled: Boolean
+  shouldShowCameraCoachMark: Boolean
+  shouldAutoExpandRoomsDropdown: Boolean
+}
+
+type CallingDebugTool {
+  visible: Boolean!
+  passiveBarHiddenParticipantsCount: Int!
+}
+
+type MeetingRoomLayoutToggleState {
+  isEnabled: Boolean!
+  lastSelectedLayout: MeetingRoomLayoutSelection
+}
+
+input MeetingRoomLayoutToggleStateInput {
+  isEnabled: Boolean
+  lastSelectedLayout: MeetingRoomLayoutSelection
+}
+
+type BulkMoveStatus {
+  id: ID
+  inProgress: Boolean!
+}
+
+input BulkMoveStatusInput {
+  teamsCallId: ID
+  inProgress: Boolean!
+}
+
+type PrejoinState {
+  incomingAudio: Boolean
+  isPSTN: Boolean
+  roomDetails: RoomDetails
+  volume: Int
+  withAudio: Boolean!
+  withVideo: Boolean!
+  withByod: Boolean!
+  wasAutomuteTriggered: Boolean
+  wasMuteToggledByUser: Boolean
+  isAuditoriumModeEnabled: Boolean
+  shouldShowCameraCoachMark: Boolean
+  shouldAutoExpandRoomsDropdown: Boolean
+}
+
+type MeetingBrandingInfoCache {
+  id: ID!
+  brandAccentColor: String
+}
+
+enum CurrentCallingState {
+  InCall
+  ScreenSharing
+  None
+}
+
+input RoomDetailsInput {
+  room: ClientRoomInput
+  roomParticipantInMeeting: ClientRoomInput
+  wasRoomBluetoothProximityTriggered: Boolean
+  wasRoomLoudSpeakerInTheMeetingTriggered: Boolean
+  wasByodConnectedDeviceRoomSelected: Boolean
+  byodRoomAudioDeviceId: String
+}
+
+input ClientRoomInput {
+  userId: ID!
+  displayName: String!
+  proximityValidationCode: Int
+}
+
+type RoomDetails {
+  room: ClientRoom
+  roomParticipantInMeeting: ClientRoom
+  wasRoomBluetoothProximityTriggered: Boolean
+  wasRoomLoudSpeakerInTheMeetingTriggered: Boolean
+  wasByodConnectedDeviceRoomSelected: Boolean
+  byodRoomAudioDeviceId: String
+}
+
+type ClientRoom {
+  displayName: String!
+  address: String
+  buildingAddress: String
+  userId: ID!
+  rssi: Int
+  proximityValidationCode: Int
+}
+
+input RoomCoordinatesInput {
+  tenantId: String!
+  organizerId: String!
+  threadId: String!
+  messageId: String!
+  additionalMessageId: String
+}
+
+type ActivePptSession {
+  id: ID!
+  contentName: String
+  webUrl: String
+  sessionSlide: PptSlide!
+  localSlide: PptSlide
+  slidesCount: Int
+  mode: PptSharingMode!
+  privateViewingEnabled: Boolean!
+  presentationUrl: String
+  mediaStates: [PptMediaPlaybackState!]
+  cameoState: PptCameoState
+  isWrsViewerFirstLoaded: Boolean
+  _: Boolean
+}
+
+type PptSlide {
+  slideIndex: Int!
+  timelineMappings: [PptTimeline!]!
+}
+
+type PptTimeline {
+  step: Int!
+  timelineId: ID!
+  lastClickTime: Int!
+  startTimeOffset: Int!
+}
+
+enum PptSharingMode {
+  Unestablished
+  Viewing
+  BrowsingPrivately
+  Presenting
+}
+
+type PptMediaPlaybackState {
+  playerName: String!
+  playing: Boolean!
+  position: Float!
+  volume: Float
+  timestamp: Float
+}
+
+type PptCameoState {
+  cameoDetectedInCurrentSlide: Boolean
+  cameoDetectedInPresentation: Boolean
+  hasAutoEnteredCameo: Boolean
+  shouldAutoEnterCameo: Boolean
+}
+
+type WhiteboardSharingSession {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type StreamPermissionsDebug {
+  acknowledgementRequired: Boolean!
+  acknowledged: Boolean!
+  url: String
+}
+
+type CalendarLeftRailChannelColorsState {
+  color: String!
+  threadId: String!
+}
+
+type CallLogParticipant {
+  id: ID!
+  # Local value if we've updated the display name for this Participant object
+  hasDisplayName: Boolean!
+  # Local display name value after all lookups
+  displayName: String
+}
+
+type StreamPermissionsDebugResponse {
+  response: Boolean!
+}
+
+type AlertAction {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+# This is compat hack to make calling resolvers work, do not copy or use similar patterns
+# without explicit permission from GraphQL Team
+type Call
+  @model(
+    tsType: "CallingFieldsFragmentModel"
+    from: "@msteams/data-fragments-common"
+    scope: CLIENT_RESOLVERS
+  ) {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type CallingIntent {
+  isFake: Boolean
+}
+
+enum TranslationStatus {
+  Done
+  InProcess
+  UnknownError
+  ScoreTooLow
+  TooManyCharacters
+  NotStarted
+}
+
+type DeletionInfo {
+  showMessageAsDeleted: Boolean
+  canBeUndeleted: Boolean
+  deleteFailed: Boolean
+}
+
+type Translation {
+  status: TranslationStatus
+  content: String
+  fromLanguage: String
+}
+
+type DiagnosticInfo {
+  diagnosticErrorCode: Int!
+  diagnosticMessage: String
+}
+
+enum MessageImportance {
+  Standard
+  Important
+  Urgent
+}
+
+input ForwardMessageInput {
+  # select fields from Message type in data-schema module.graphql
+  id: ID
+  content: String
+  version: String
+  originalArrivalTime: String
+  from: ID
+  messageType: String
+  isImportant: Boolean
+  importance: MessageImportance
+  imDisplayName: String
+  clientMessageId: ID
+  translatedSubject: String
+  translatedContent: String
+  sourceLanguageName: String
+  sourceLanguageCode: String
+}
+
+type ForwardMessage {
+  # select fields from Message type in data-schema module.graphql
+  id: ID
+  content: String
+  version: String
+  originalArrivalTime: String
+  from: ID
+  messageType: String
+  isImportant: Boolean
+  importance: MessageImportance
+  imDisplayName: String
+  clientMessageId: ID
+  translatedSubject: String
+  translatedContent: String
+  sourceLanguageName: String
+  sourceLanguageCode: String
+}
+
+type Message {
+  deletionInfo: DeletionInfo
+  translation: Translation
+  diagnosticInfo: DiagnosticInfo
+}
+
+type DeletedMessage {
+  id: ID!
+  message: Message
+}
+
+type Participant {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type ParticipantStream {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type DebugConversation {
+  id: ID!
+  isOneOnOne: Boolean
+  chatSubType: Int
+  substrateGroupId: String
+  tenantId: String
+}
+
+type ChatDisabledContext {
+  isUIDisabled: Boolean!
+  disabledReason: ChatDisabledContextReason
+  extendedData: String
+  lastUpdatedTime: String
+}
+
+enum ChatDisabledContextReason {
+  ChatDisabledDueToIB
+  SmsChatDisabledDueToLicense
+  SmsChatDisabledDueToRNLError
+  ChatDisabledDueToBotStatus
+  ChatDisabledDueToRecipientTeamsUpgradePolicy
+  UnknownReason
+}
+
+type ChatDisabledContextResponse {
+  success: Boolean!
+  message: String
+  chatDisabledContext: ChatDisabledContext!
+}
+
+type Conversation {
+  isHighImportance: Boolean
+  isUrgentImportance: Boolean
+  activeCallsCount: Int
+  datatid: String
+  displayName: String
+  hasActiveCalls: Boolean
+  hasFailedMessages: Boolean
+  otherMemberMris: [String!]
+  pictureGroup: [PictureGroup!]
+  isNewChat: Boolean
+  isBotBlocked: Boolean
+  isBotUser: Boolean
+  isFederated: Boolean
+  isHidden: Boolean
+  isContactTagged: Boolean
+  pictureUpn: String
+  pinnedIndex: Int
+  showAtMention: Boolean
+  showMarkers: Boolean
+  tooltipTitle: String
+  longTitle: String
+
+  lastMessageTime: String
+  lastContentMessageTime: String
+  messagePreview: String
+  messagePreviewAria: String
+
+  isLastMessageText: Boolean
+  isMeeting: Boolean
+  isSfB: Boolean
+  # Key for caching group image is joined mris of users in image.
+  plGroupKey: String
+  presenceSource: String
+  hasActions: Boolean
+  canBeDiscarded: Boolean
+  canBotBeBlocked: Boolean
+  canBePinned: Boolean
+  canBeMuted: Boolean
+  canBeLeft: Boolean
+  canBeHidden: Boolean
+  canBeFavorited: Boolean
+  canTagContact: Boolean
+  canPopOut: Boolean
+  canManageApps: Boolean
+  chatDisabledContext: ChatDisabledContext
+  clientArrivalTime: String
+  pinnedConversationItems: [PinnedConversationItemInfo!]
+  picture: String
+}
+
+enum MeetingRoomRemoteControlLayoutType {
+  Grid
+  Audience
+  LargeGrid
+  Content
+  PeopleAndContent
+  FrontRow
+  Accessibility
+}
+
+enum DeviceTypeInput {
+  Camera
+  Microphone
+  Speaker
+}
+
+input DeviceInput {
+  id: String!
+  label: String
+  type: DeviceTypeInput!
+}
+
+input AudioDeviceInput {
+  id: String!
+  label: String
+  speakerId: String
+  microphoneId: String
+}
+
+input SelectedDevicesInput {
+  microphoneId: String
+  speakerId: String
+  cameraId: String
+  audioDeviceId: String
+}
+
+input DeviceListInput {
+  id: ID
+  speakers: [DeviceInput!]
+  microphones: [DeviceInput!]
+  cameras: [DeviceInput!]
+  camerasSupportingAutoFraming: [DeviceInput!]
+  audioDevices: [AudioDeviceInput!]
+  selectedDevices: SelectedDevicesInput
+  defaultSpeakerDeviceId: String
+}
+
+type DeviceList {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type QuestionnaireItemsByType {
+  itemType: QuestionnaireItemType!
+  items: [QuestionnaireItem!]!
+}
+
+input QuestionnaireItemsByTypeInput {
+  itemType: QuestionnaireItemType!
+  items: [QuestionnaireItemInput!]!
+}
+
+enum QuestionnaireItemType {
+  Audio
+  AttendeeAudio
+  Video
+  ScreenSharing
+  Broadcast
+  ScreenshareFromChat
+  AttendeeGeneral
+  AttendeeCaptions
+  CallClosedCaptions
+  EffectiveMeeting
+  Other
+}
+
+type QuestionnaireItem {
+  category: String!
+  token: Int!
+  id: ID!
+  editLength: Int
+  isStarRating: Boolean
+}
+
+input QuestionnaireItemInput {
+  category: String
+  token: Int
+  id: ID!
+  editLength: Int
+  isStarRating: Boolean
+}
+
+enum FeedbackType {
+  """
+  regular Mean Opinion Score feedback
+  """
+  Quality
+  """
+  special feedback for calls that were canceled shortly after getting connected (within 5s from being connected)
+  """
+  ShortDurationHangup
+  """
+  special feedback for effective meeting feedback
+  """
+  EffectiveMeeting
+  """
+  v2 for effective meeting feedback
+  """
+  EffectiveMeetingV2
+  """
+  Viva version effective meeting feedback shown to users who opted into Viva EMF
+  """
+  EffectiveMeetingViva
+}
+
+enum FeedbackCallType {
+  P2P
+  GroupCall
+  Meeting
+  ScreenshareFromChat
+  PSTN
+  SfB
+}
+
+type Questionnaire {
+  type: FeedbackType!
+  isRateable: Boolean!
+  duration: Float!
+  questionnaireItemsByType: [QuestionnaireItemsByType!]!
+  feedbackCallType: FeedbackCallType
+  useRatingOnly: Boolean
+  isSampledForPostCallCQF: Boolean
+  experimentTag: String
+  organizerId: String
+}
+
+input QuestionnaireInput {
+  type: FeedbackType!
+  isRateable: Boolean!
+  duration: Float!
+  questionnaireItemsByType: [QuestionnaireItemsByTypeInput!]!
+  feedbackCallType: FeedbackCallType
+  useRatingOnly: Boolean
+  isSampledForPostCallCQF: Boolean
+  experimentTag: String
+  organizerId: String
+}
+
+type BreakoutRoomSyncHistory {
+  id: String!
+  participantsIds: [String!]
+}
+
+# Fields are generated from other sources or from data from data-schema
+type User {
+  avatarUrl: String
+  isAnonymousUser: Boolean
+  companyName: String
+  guestlessDisplayName: String
+  isAnonymousB2bUser: Boolean
+  isFederated: Boolean
+  firstname_lowercase: String
+  lastname_lowercase: String
+  fullname_lowercase: String
+  requestCount: Int
+  fetchErrorCode: String
+}
+
+type PictureGroup {
+  userId: String
+  displayName: String
+}
+
+type CalendarInput {
+  dateRange: [String!]
+  selectedDate: String
+  dateRangeType: String
+  activeCalls: [ICallInfo!]
+  workHours: IWorkHours
+  workWeekDays: [Int!]
+  statusBarMessage: StatusBarMessage
+}
+
+type DlpDialogData {
+  isReport: Boolean!
+  isOverride: Boolean!
+  justification: String!
+}
+
+input IWorkHoursInput {
+  startTimeInMinutes: Int!
+  endTimeInMinutes: Int!
+}
+
+type ICalendarSettings {
+  dateRangeType: String
+  workHours: IWorkHours
+  workWeekDays: [Int!]
+  isLeftRailExpanded: Boolean
+}
+
+type WebApplicationInfo {
+  id: String
+  resource: String
+  appKey: String
+  applicationPermissions: [String!]
+}
+
+enum AppInstallScope {
+  Personal
+  Team
+  GroupChat
+}
+
+enum MeetingSurface {
+  Unknown
+  SidePanel
+  Stage
+}
+
+enum ConfigurableTabContext {
+  Unknown
+  PersonalTab
+  ChannelTab
+  PrivateChatTab
+  MeetingChatTab
+  MeetingDetailsTab
+  MeetingSidePanel
+  MeetingStage
+  CallingSidePanel
+}
+
+enum StaticTabContext {
+  Unknown
+  PersonalTab
+  ChannelTab
+  PrivateChatTab
+  MeetingChatTab
+  MeetingDetailsTab
+  MeetingSidePanel
+  MeetingStage
+  TeamLevelApp
+}
+
+type GalleryTabDefinition {
+  configurationUrl: String
+  canUpdateConfiguration: Boolean
+  canHaveTabConversation: Boolean
+  scopes: [AppInstallScope]
+  meetingSurfaces: [MeetingSurface]
+  context: [ConfigurableTabContext]
+}
+
+type StaticTabDefinition {
+  entityId: String
+  name: String
+  order: Int
+  contentUrl: String
+  contentBotId: String
+  websiteUrl: String
+  scopes: [AppInstallScope]
+  context: [StaticTabContext]
+  containerAppIds: [String!]
+}
+
+type AppDefinition {
+  id: ID!
+  name: String
+  tenantId: String
+  galleryTabs: [GalleryTabDefinition!]
+  staticTabs: [StaticTabDefinition!]
+  validDomains: [String!]
+  showTabLoadingIndicator: Boolean
+  webApplicationInfo: WebApplicationInfo
+  isFullTrustApp: Boolean
+}
+
+type CalendarSurfaceExtendedTab {
+  tabId: String!
+  appDefinition: AppDefinition!
+  name: String!
+  url: String!
+}
+
+type IWorkHours {
+  startTimeInMinutes: Int
+  endTimeInMinutes: Int
+}
+
+type MeetingCompositeKey {
+  conversationId: ID!
+  isTeamsMeeting: Boolean!
+  messageId: ID!
+  key: ID!
+  eventId: ID!
+  useCalUid: Boolean!
+  modifiedStamp: Int
+  scheduleType: CalendarMeetingScheduleType!
+}
+
+type MeetingInfo {
+  id: ID!
+  conversationId: ID
+  duration: Int
+  isRecording: Boolean
+  recordingInitiator: String
+  startedAt: Int
+  isPinned: Boolean
+  isMuted: Boolean
+  location: String
+  name: String
+  startDate: String
+  eventId: String
+  lastMessage: MeetingMessage
+  participants: [MeetingParticipant!]
+}
+
+type MeetingMessage {
+  content: Message
+  author: MeetingParticipant
+}
+
+type MeetingParticipant {
+  id: ID!
+  displayName: String
+  avatar: String
+}
+
+type CalendarMeetings {
+  activeMeetings: [MeetingInfo!]
+  recentMeetings: [MeetingInfo!]
+  pinnedMeetings: [MeetingInfo!]
+}
+
+type ICallInfo {
+  callId: String
+  teamsCallId: Int
+  callUrl: String
+  expiration: Int
+  status: String
+  callInitiator: String
+  messageId: String
+  replyChainMessageId: String
+  conversationId: String
+}
+
+enum CalendarSyncStatusEnum {
+  UNIFIED_CALENDAR_SYNCING
+  UNIFIED_CALENDAR_SYNC_FAILED
+  UNIFIED_CALENDAR_UPTO_DATE
+  USER_CALENDAR_SYNCING
+  USER_CALENDAR_SYNC_FAILED
+  USER_CALENDAR_UPTO_DATE
+  CONNECTED_CALENDAR_SYNCING
+  CONNECTED_CALENDAR_SYNC_FAILED
+  CONNECTED_CALENDAR_UPTO_DATE
+  EMPTY
+  MULTI_CALENDAR_SYNCING
+  MULTI_CALENDAR_SYNC_FAILED
+  MULTI_CALENDAR_UPTO_DATE
+  CALENDAR_LEFT_RAIL_SETTINGS_SYNCING
+  CALENDAR_LEFT_RAIL_SETTINGS_SYNC_FAILED
+  CALENDAR_LEFT_RAIL_SETTINGS_UPTO_DATE
+}
+
+enum DisallowedToPostReason {
+  None
+  MutedTeamMember
+  OnlyOwnersCanPost
+}
+
+enum CalendarMeetingScheduleType {
+  private
+  online
+  event
+  inPerson
+  channel
+  broadcast
+}
+
+enum ClientChannelType {
+  Standard
+  Private
+  Shared
+}
+
+enum TeamMemberRole {
+  Undefined
+  User
+  Admin
+  Guest
+}
+
+enum ChannelPostPermissions {
+  Everyone
+  Moderators
+  EveryoneButGuests
+}
+
+enum GeneralChannelPosting {
+  AnyonePost
+  AnyoneWithWarning
+  OwnersPost
+}
+
+type ChannelSettings {
+  channelPostPermissions: ChannelPostPermissions
+}
+
+type TeamSettings {
+  generalChannelPosting: GeneralChannelPosting
+}
+
+type ChannelWithTeam {
+  id: ID!
+  channelType: ClientChannelType
+  substrateGroupId: String
+  channelResourceTenantId: String
+  isBackedBySubstrateGroup: Boolean
+  displayName: String!
+  isGeneral: Boolean!
+  team: ClientTeam!
+  disallowedToPostReason: DisallowedToPostReason!
+  consumptionHorizon: ClientConsumptionHorizon
+  filesRelativePath: String
+  sharepointSiteUrl: String
+  memberRole: TeamMemberRole
+  isModerator: Boolean
+  channelSettings: ChannelSettings
+  isArchived: Boolean
+  isDeleted: Boolean
+}
+
+type ClientTeam {
+  id: ID!
+  displayName: String!
+  smtpAddress: String
+  pictureETag: String
+  tenantId: String
+  groupId: String
+  sharepointSiteUrl: String
+  teamSettings: TeamSettings
+  sensitivityLabel: SensitivityLabelConversation
+}
+
+type SensitivityLabelDefaultContentLabel {
+  id: ID!
+}
+
+type SensitivityLabelConversation {
+  id: ID!
+  name: String
+  displayName: String
+  parentName: String
+  parentDisplayName: String
+  parentToolTip: String
+  toolTip: String
+  isUserScoped: Boolean
+  priority: Int
+  defaultContentLabel: SensitivityLabelDefaultContentLabel
+}
+
+type LocationSearchResult {
+  id: String
+  name: String
+  buildingAddress: String
+  address: String
+  type: LocationType
+}
+
+type BroadcastQnaFeedStatus {
+  isQnaFeedLoaded: Boolean
+  hasNewMessages: Boolean
+}
+
+enum LocationType {
+  Room
+  Building
+}
+
+input CalendarEventCardCalloutInput {
+  calloutCalendarEvent: CalloutCalendarEventInput
+  target: CalloutTargetInput
+}
+
+input CalloutCalendarEventInput {
+  objectId: ID
+  eventType: CalendarAppointmentType
+  isOnlineMeeting: Boolean
+  skypeTeamsDataObj: SkypeTeamsDataObjInput
+  isAppointment: Boolean
+  isCancelled: Boolean
+  isOrganizer: Boolean
+  subject: String
+  cleanGlobalObjectId: String
+  seriesMasterId: String
+  iCalUID: String
+  skypeTeamsMeetingUrl: String
+  joinOnlineMeetingUrl: String
+  startTime: String!
+  endTime: String!
+  eventTimeZone: ScalarEnumString
+  mailboxAddress: String
+  myResponseType: String
+  location: String
+  organizerName: String
+  isAllDayEvent: Boolean
+  cardId: String
+  attendees: [AttendeeInput!]
+  showAs: AvailabilityFreeBusyType
+  isPrivate: Boolean
+  categories: [String!]
+  webinarRegistration: WebinarRegistrationInfoInput
+}
+
+input SkypeTeamsDataObjInput {
+  cid: String
+  rid: String
+  mid: String
+  uid: String
+  private: Boolean
+  type: Int
+}
+
+input AttendeeInput {
+  address: String
+  status: ResponseStatusInput
+}
+
+input ResponseStatusInput {
+  response: String
+}
+
+input CalloutTargetInput {
+  x: Int!
+  y: Int!
+  isPeek: Boolean!
+}
+
+type CalendarEventCardCallout {
+  calloutCalendarEvent: CalloutCalendarEvent!
+  target: CalloutTarget!
+}
+
+type CalloutCalendarEvent {
+  objectId: ID
+  eventType: CalendarAppointmentType
+  isOnlineMeeting: Boolean
+  skypeTeamsDataObj: SkypeTeamsDataObj
+  isAppointment: Boolean
+  isCancelled: Boolean
+  isOrganizer: Boolean
+  isResponseRequested: Boolean
+  subject: String
+  cleanGlobalObjectId: String
+  seriesMasterId: String
+  iCalUID: String
+  skypeTeamsMeetingUrl: String
+  joinOnlineMeetingUrl: String
+  startTime: String!
+  endTime: String!
+  eventTimeZone: ScalarEnumString
+  mailboxAddress: String
+  myResponseType: String
+  location: String
+  organizerName: String
+  isAllDayEvent: Boolean
+  cardId: String
+  attendees: [Attendee!]
+  showAs: AvailabilityFreeBusyType
+  isPrivate: Boolean
+  categories: [String!]
+  virtualEventsData: VirtualEventsData
+  webinarRegistration: WebinarRegistrationInfo
+  rightsManagementLicenseData: RightsManagementLicenseData
+  inviteAllMembers: Boolean
+}
+
+type SkypeTeamsDataObj {
+  cid: String
+  rid: String
+  mid: String
+  uid: String
+  private: Boolean
+  type: Int
+}
+
+type Attendee {
+  address: String
+  status: ResponseStatus
+}
+
+type ResponseStatus {
+  response: String
+}
+
+type CalloutTarget {
+  x: Int!
+  y: Int!
+  isPeek: Boolean!
+}
+
+enum CalendarAppointmentType {
+  Single
+  Occurrence
+  Exception
+  RecurringMaster
+}
+
+# free busy status of attendee - used in contextual menu for show as
+enum AvailabilityFreeBusyType {
+  Free
+  Tentative
+  Busy
+  Oof
+  WorkingElsewhere
+  Unknown
+}
+
+enum LayoutType {
+  None
+  Gallery
+  Content
+  ContentWithGallery
+}
+
+enum CallingScreenGalleryType {
+  Grid
+  Audience
+  LargeGrid
+  FrontRow
+  Accessibility
+}
+
+type StatusBarMessage {
+  message: String
+  messageType: StatusBarMessageType
+}
+
+enum StatusBarMessageType {
+  Info
+  Error
+  Retry
+  RetryFailed
+}
+
+input LpcStateUpdate {
+  isLivePersonaCardInitialized: Boolean!
+  lastLoggedInUserMri: String
+}
+type LpcState {
+  isLivePersonaCardInitialized: Boolean!
+  lastLoggedInUserMri: String
+}
+
+type CoachReport {
+  sessionMetadata: CoachReportSessionMetadata!
+  critiques: [CoachReportCritiques!]!
+  userData: CoachReportUserData!
+}
+
+scalar ScalarEnumString
+  @model(tsType: "any", scope: SERVER_RESOLVERS)
+  @model(tsType: "any", scope: BROWSER_RESOLVERS)
+  @model(tsType: "any", scope: CLIENT_RESOLVERS)
+scalar DateTime
+  @model(tsType: "any", scope: SERVER_RESOLVERS)
+  @model(tsType: "any", scope: BROWSER_RESOLVERS)
+  @model(tsType: "any", scope: CLIENT_RESOLVERS)
+scalar JSONData
+  @model(tsType: "any", scope: SERVER_RESOLVERS)
+  @model(tsType: "any", scope: BROWSER_RESOLVERS)
+  @model(tsType: "any", scope: CLIENT_RESOLVERS)
+
+type CoachReportSessionMetadata {
+  summaryText: String!
+  sourceLanguage: String!
+  startTimeUTC: DateTime!
+  endTimeUTC: DateTime!
+  enabledCritiqueNames: [String!]!
+}
+
+type CoachReportCritiques {
+  name: String!
+  timestampUTC: DateTime!
+  fSuppressed: Boolean!
+  critiqueTemplateId: Int!
+  critiqueTemplateInfo: CoachReportTemplateInfo!
+  suggestionTitle: String!
+  suggestionTemplateId: Int!
+  suggestionTemplateInfo: CoachReportTemplateInfo!
+}
+
+type CoachReportTemplateInfo {
+  message: String
+  detectedValue: String
+  alternativePhrase: String
+  wordsToConsider: [String]
+}
+
+type CoachReportUserData {
+  userMetadata: CoachReportUserMetadata!
+  userTalking: [CoachReportUserTalkingInterval!]!
+}
+
+type CoachReportUserMetadata {
+  userId: String!
+}
+
+type CoachReportUserTalkingInterval {
+  startTimeUTC: DateTime!
+  endTimeUTC: DateTime!
+}
+
+# the type of supported entities
+# NOTE: This MUST be all lower casing
+enum EntityType {
+  acceptsharedchannelinvitationdialog
+  accessibilitypanel
+  accounts
+  activity
+  addcontactdialog
+  addchannel
+  addmember
+  addmembernewteam
+  addmembertoprivatechanneldialog
+  addmembertoteamdialog
+  agendapage
+  alttext
+  annotation
+  appdetails
+  appswitcherdesktopactivecalldialog
+  appswitcherwebactivecalldialog
+  appswitcherwebmultipletabsdialog
+  archiveteam
+  attendancereport
+  attendeeview
+  authrefreshdialog
+  autobrbconfirmationdialog
+  autoinstallnotification
+  bannerNotification
+  blank
+  blockChat
+  livepersonacard
+  livepersonaeditor
+  brbfeedbackdialog
+  breakoutrooms
+  breakoutroomsassignment
+  breakoutroomsassignmenttype
+  breakoutroomscreaterooms
+  breakoutroomsdeleteroom
+  breakoutroomsdeleterooms
+  breakoutroomseditroom
+  breakoutroomssettings
+  breakoutroomspanel
+  broadcastfeedback
+  broadcastliveevent
+  broadcastqna
+  broadcasts
+  byodattendeewindow
+  byodchat
+  byodroster
+  calendar
+  callablechannels
+  callingalertdialog
+  callingbannernotification
+  callingconfirmdialog
+  callingdeeplink
+  callingdialog
+  callingprotocoldeeplinkdialog
+  callhistoryrow
+  calls
+  callscontent
+  callsgallery
+  callsgalleryandcontent
+  callskeypad
+  callsmain
+  callsmonitor
+  callstransfer
+  cameraeffects
+  campaignnotifications
+  cast
+  channelanalytics
+  channelcalendar
+  channelconnectors
+  channelcopilot
+  channelworkflows
+  channeldeeplink
+  channeldelete
+  channeledit
+  channelemail
+  channelemailerror
+  channelemailv2
+  channelinvitations
+  channelmanage
+  channelmembers
+  channelmoderators
+  channelnotificationsettings
+  channelroster
+  channels
+  channelsettings
+  channelsPinnedPost
+  channelsSystemMessage
+  channelcontextualsearch
+  channeltags
+  chats
+  chatschannelconv
+  chatContextualSearch
+  chatfilesdetails
+  chatHighlightsDetails
+  chatManageApps
+  chatpeopledetails
+  chatsInfo
+  chatsInfoView
+  chatworkflows
+  chatInviteConfirmation
+  classesintegrationcontent
+  closedcaptionssettings
+  cloudStorageDialog
+  coachreport
+  codesnippet
+  communities
+  communitiesaddmember
+  communitiesblockmembers
+  communitiescreatechannel
+  communitieseditchannel
+  communitiesdelete
+  communitiesdeletechannel
+  communitiesevents
+  communitiescreateevent
+  communitiesguidelinesdialog
+  communitiesgetappdialog
+  communitiescreatedialog
+  communitieseditdialog
+  communitiesjoinrequest
+  communitiesmembers
+  communitiesonboarding
+  communitiesjoininviteview
+  communitiesremovemember
+  communitiessendpostasemaildialog
+  communitieswelcomebotconfigdialog
+  connectedcalendardialog
+  connectedcalendarsurfacedialog
+  connectorinstanceconfiguration
+  contactssync
+  copilot
+  contentcamerasetup
+  coursecalendar
+  courseteams
+  createchanneldialog
+  crosspostchannelselectiondialog
+  crosspostchannelselectiondialogV2
+  crosspostdeletedialog
+  crossteamanalytics
+  customapp
+  customizereactions
+  default
+  deletechannelreactdialog
+  showhidegeneralchannelwarningdialog
+  deletechat
+  deleteteam
+  devicedetails
+  devicesettings
+  defaultchannelnavdialog
+  deleteActivityFeedItem
+  discoverappsnotifications
+  discoversurface
+  dlp
+  eduteamcreate
+  email
+  embedcommunitycodedialog
+  error
+  esp
+  events
+  eventsbroadcastqna
+  example
+  extensions
+  faceenrollment
+  file
+  fileopensettings
+  filepicker
+  filesoneupviewer
+  floatingmonitor
+  floodgate
+  fluid
+  flyout
+  flyoutphonelink
+  flyoutwhatsnew
+  forwardMessage
+  framework
+  freemiumupgrade
+  gallery
+  galleryImages
+  getlinktoteamorchanneldialog
+  giphyconsent
+  givefeedbackchoices
+  guardians
+  guardiansapprovalrequest
+  help
+  homepage
+  hostedincontextstore
+  hwctaskmodule
+  hybridplaceholder
+  hyperlink
+  identity
+  identitydialog
+  inAppToast
+  incontextstore
+  invisionwhiteboard
+  invitecoworkers
+  joinlinkdialog
+  leavecommunity
+  leavechanneldialog
+  leavechannellastownerdialog
+  leavechat
+  leaveteam
+  leaveGroupAndBlockUser
+  licenserequestdialog
+  licenses
+  linkedin
+  lobnotifications
+  locationapi
+  m365ChatLike
+  m365ChatDislike
+  m365ChatReportHarm
+  manageapps
+  manageappswebhook
+  mediastreams
+  meet
+  meetinganalytics
+  meetingapis
+  meetingcollaboration
+  meetingdetails
+  meetingoptionscreatedialog
+  meetingrecap
+  meetingrecapchiclet
+  meetingrecaptab
+  meetingroomallinone
+  meetingroomallinonecall
+  meetingroomconsolecall
+  meetingroomfrontofroom
+  meetingroomfrontofroomcontent
+  meetingroomfrontofroomgallery
+  meetings
+  meetingsettings
+  meetingstream
+  meshavatar
+  messagedraft
+  messages
+  memenu
+  minimodeMeetingScheduler
+  notes
+  notificationsettingsdefault
+  oauthcode
+  onboardingnotifications
+  open3sfeedback
+  optionssettingsdialog
+  ownerleavecommunity
+  percommunitynotificationsettingsdialog
+  pearnotdefaultapp
+  peopleapp
+  pstncallmedialog
+  pinnedchatsmaxreached
+  pinnedconversationitems
+  pinunpinpost
+  platformapp
+  platformappdetails
+  platformappconsent
+  platformappdevicepermissions
+  platformappratingcoachmark
+  platformapps
+  platformauthconsentdialog
+  platformStage
+  platformstagemodal
+  platformstageinactivemeeting
+  platformsubscriptionplans
+  platformtab
+  platformTabGallery
+  prejoinoverlaydialog
+  premiumtrialdialog
+  presentdeeplinknomeetingcontextdialog
+  presentertoolbar
+  ptzextension
+  queues
+  queueuser
+  queuesanalyticsheadertab
+  queuesanalyticshistoricalnavigationitem
+  queuesanalyticsrealtimenavigationitem
+  registration
+  removechannelemail
+  removechatuser
+  reportConcern
+  reportConcernForTFW
+  restartrecomendeddialog # Temporary Entity type: clean up as part of #1889500
+  restorechannel
+  restorechannelreactdialog
+  restoreteam
+  roomremote
+  roster
+  schedulingform
+  schoolteams
+  search
+  selectMediaApi
+  selectpeoplepicker
+  settingsdialog
+  settingsstore
+  settingsstorecallqueue
+  settingsstoredelegator
+  sharechannelwithuserdialog
+  sharedchannelacceptinvitation
+  sharedchanneldeclineinvitation
+  sharedchannelspendinginvites
+  sharedchanneldenyinvitation
+  sharewithteamyouowndialog
+  sharedchannelcreateinvitationsdialog
+  showChannelOwners
+  showchannelownersreactdialog
+  showformemberdialog
+  showformemberdialogv2
+  teamslist
+  sharechatlink
+  shareformdialog
+  shareMeetingInfo
+  sharecommunitieslink
+  reportconcerncommunities
+  signoutdialog
+  simplecollab
+  smartdeviceagendapage
+  smartdevicelogin
+  smartdevicelogoutdialog
+  stagecontent
+  staleteamsdialog
+  staleteamsdismiss
+  standaloneapp
+  stagedapps
+  stagingroomstartmeetingconfirmationdialog
+  stopsharingchannelwithteam
+  stopsharingchannelwithteamreactdialog
+  store
+  storecart
+  storecartcheckout
+  storefre
+  streamcamera
+  streamcamerainchannels
+  streamcameraincommunities
+  survey
+  switchaccountdialog
+  tabapps
+  taskmodule
+  teamarchive
+  teamchannels
+  teamcreate
+  teamdeeplink
+  teamdiscover
+  teamedit
+  teamsgallery
+  teamjoin
+  teamjoincode
+  teamjoindialog
+  teamleave
+  teammanage
+  teamanalytics
+  teammanageapps
+  teammanagetags
+  teampendingrequests
+  teampicture
+  changeteampicture
+  teamrenewal
+  teamrestore
+  teams
+  teamserrordialog
+  teamsettings
+  tflfre
+  toasts
+  tpndialog
+  transcript
+  transcriptcontent
+  transcripttab
+  translationfeedback
+  twowaysmsfriendlyname
+  unparkcalldialog
+  unifiedconsentdialog
+  unsupporteddeeplinkdialog
+  updatedesktopapp
+  updategroupchatavatar
+  tfwupdategroupchatavatar
+  updatemsaprofileavatardialog
+  updatemsaprofilenamedialog
+  usermediadialog
+  videobackgrounds
+  stylemyroom
+  videoeffectsandavatar
+  videoeffectscustomization
+  videoeffectsmoreview
+  viewImagesApi
+  virtualconsumerevents
+  virtualevents
+  voiceenrollment
+  whatsnewdialog
+  wiki
+  windowingerrordialog # Temporary Entity type: clean up as part of #1889500
+  workflows
+  yammerqna
+  locationnotification
+  locationnotificationbanner
+  externalnavigation
+  officeintegrationfredialog
+  meetingcollaborationcontent
+  callingdeeplinkDialog
+  openfeedbackdialog
+}
+
+# the entity actions which have their own views.
+# NOTE: This MUST be all lower casing
+# e.g. chat/list, chat/create, call/join, call/roster, call/info
+enum EntityAction {
+  config
+  confirm
+  create
+  tenantLogin
+  tenantRedemption
+  default
+  delete
+  error
+  health
+  info
+  infoDetails
+  join
+  list
+  locationhandler
+  manage
+  mutate
+  signin
+  update
+  view
+  share
+  leave
+  empty
+  loading
+}
+
+input EntityStateInput {
+  flushableByLinkedEntity: Boolean
+  linkedEntityUpdate: LinkedEntityInput
+}
+
+type EntityState {
+  flushableByLinkedEntity: Boolean!
+}
+
+input WindowOptionsInput {
+  left: Int!
+  top: Int!
+  width: Int!
+  height: Int!
+}
+
+type WindowOptions {
+  left: Int!
+  top: Int!
+  width: Int!
+  height: Int!
+}
+
+type Entity {
+  id: ID
+  type: EntityType!
+  action: EntityAction!
+  linkedEntity: LinkedEntity
+  entityState: EntityState!
+  options: String
+  # ! deprecated, use the one attached to window instead. Todo: remove - 2468331
+  windowOptions: WindowOptions
+}
+
+type EntityCommand {
+  # the visibility state change to execute on the entity
+  visibilityState: EntityVisibilityState!
+  # the state transition option
+  stateTransition: EntityStateTransition!
+  # the correlation object that ties control flow, across process boundaries
+  correlation: Correlation
+}
+
+type LinkedEntity {
+  id: ID!
+  type: EntityType!
+  action: EntityAction
+}
+
+# The current active entities
+type ActiveEntities {
+  # subNav active entity
+  subNavEntity: Entity
+  # header active entity
+  headerEntity: Entity
+  # start active entity
+  startEntity: Entity
+  # main active entity
+  mainEntity: Entity!
+  # end active entity
+  endEntity: Entity
+  # entity extension of the viewport
+  entityExtension: Entity
+  # monitor active entity
+  monitorEntity: Entity
+  # notification active entity
+  inAppNotificationsEntity: Entity
+}
+
+enum EntityVisibilityState {
+  show
+  showWithoutFocusing
+  hide
+  toggle
+}
+
+# the state transition options
+enum EntityStateTransition {
+  # no transition, execute the given command action on current state
+  none
+  # flush the current state before executing the command
+  flush
+  # force flush excludes entity matching (only applies when executed in the main context)
+  forceFlush
+  # Flushes entities downstream of the execution context
+  flow
+  # Force flow excludes entity matching
+  forceFlow
+  # generate a new state and execute the command
+  new
+  # extend the current state with the given command
+  extend
+}
+
+enum SupportedViewEntities {
+  subNavEntity
+  headerEntity
+  startEntity
+  mainEntity
+  endEntity
+  monitorEntity
+  inAppNotificationsEntity
+}
+
+enum LayoutModes {
+  minimal
+  focus
+  standard
+  minimode
+}
+
+enum TargetWindowTypes {
+  main
+}
+
+enum NavigationDirection {
+  back
+  forward
+}
+
+# userContextId - user context the command came from
+input ExecutionContextInput {
+  viewEntityName: SupportedViewEntities
+  userContextId: ID
+}
+
+input EntityInput {
+  id: ID
+  type: EntityType!
+  action: EntityAction!
+  linkedEntity: LinkedEntityInput
+  # options omitted on-purpose, to obstruct rendering stack from accessing options directly.
+}
+
+input LinkedEntityInput {
+  id: ID!
+  type: EntityType!
+  action: EntityAction
+}
+
+input CorrelationInput {
+  # The correlation/session/vector ID. This is not an ID, on purpose.
+  # There can be multiple correlations with same id but different start timestamps.
+  id: String!
+  # The time of origin.
+  startTimestamp: String!
+  # The panel/logical component source. This is more of a context name than a component or button name.
+  source: String!
+  # the context of the command.
+  # NOTE: Only use for activity in T1
+  sourceHint: CorrelationSourceHint
+}
+
+# NOTE: This is a hack. Do not add more without core approval
+# TODO (#1852268): [Cleanup] Used for activity feed in T1
+enum CorrelationSourceHint {
+  Activity
+  NonHybridLeftRail
+}
+
+input EntityCommandInput {
+  # the visibility state change to execute on the entity
+  visibilityState: EntityVisibilityState!
+  # the state transition option
+  stateTransition: EntityStateTransition!
+  # the correlation object that ties control flow, across process boundaries
+  correlation: CorrelationInput!
+  # OPTIONAL: layout mode for a NEW window
+  # default is standard for main window, otherwise focus
+  layoutMode: LayoutModes
+  # OPTIONAL: Used to target specific windows (likely MAIN)
+  targetWindow: TargetWindowTypes
+}
+
+type ChannelSearchResults {
+  resultsByChannelName: [ChannelWithTeam!]!
+  resultsByTeamName: [ChannelWithTeam!]!
+}
+
+input UpdateFilePermissionInput {
+  fileId: String!
+  linkDescription: String
+  scope: String
+  shareUrl: String
+  shareId: String
+  type: String
+}
+
+input UpdatePermissionScopeInput {
+  fileId: String!
+  scope: String!
+}
+
+type WindowHistoryNavigationState {
+  # determines if the user can go back in history
+  canNavigateBack: Boolean!
+  # determines if the user can go forward in history
+  canNavigateForward: Boolean!
+  # back history
+  backHistory: [WindowHistoryNavigationItem!]!
+  # forward history
+  forwardHistory: [WindowHistoryNavigationItem!]!
+}
+
+type WindowHistoryNavigationItem {
+  windowHistoryIndex: Int!
+  entity: Entity!
+}
+
+type Correlation {
+  # This is not an ID, on purpose.
+  # There can be multiple correlations with same id but different start timestamps.
+  id: String!
+  startTimestamp: String!
+  # The source of the command associated with this correlation.
+  # This is more of a context name than a component or button name.
+  source: String!
+  # A unique ID generated by the client to indicate a launch and that'll persist for the lifetime for the resultant window and its child windows.
+  clientLaunchId: String
+}
+
+# A representation of a window in the system. Holding content and tracking info.
+type Window {
+  id: ID!
+  # The active content held in this instance of a window
+  activeEntities: ActiveEntities!
+  # The window history
+  windowHistory: [WindowHistoryItem!]!
+  # The current window history index
+  currentWindowHistoryIndex: Int!
+  # The window history navigation state
+  windowHistoryNavigationState: WindowHistoryNavigationState!
+  # Each change in content gets a new unique correlation
+  correlation: Correlation!
+  # The state of the single container which can hold an extended entity
+  extendedEntityContainerState: ExtendedEntityContainerState!
+  # If present, an entity extension is ready to block the next command for the window
+  blockingEntityExtension: BlockingEntityExtension
+  # True if is a main window (could be standard main window or flyout)
+  isMainWindow: Boolean!
+  # True if it is a custom notifications window
+  isNotificationsWindow: Boolean!
+  # Initial visibility state of window - Set it to true to create it in a minimized state.
+  isInitialWindowStateHidden: Boolean!
+  # ID of the user that owns the content in the window
+  userContextId: ID
+  # Layout specific config variables
+  layoutConfig: LayoutConfig!
+
+  windowOptions: WindowOptions
+}
+
+type LayoutConfig {
+  # Layout mode of window - the layout template created from a subset of available slots
+  # Does not change in lifetime of window
+  layoutMode: LayoutModes!
+  # True if the window is in fullscreen state
+  isFullscreen: Boolean!
+  # Slot specific layout config
+  slots: SlotsLayoutConfig
+}
+
+type SlotsLayoutConfig {
+  contextualNotifications: SlotLayoutConfig
+  end: SlotLayoutConfig
+  header: SlotLayoutConfig
+  main: SlotLayoutConfig
+  monitor: SlotLayoutConfig
+  nav: SlotLayoutConfig
+  notifications: SlotLayoutConfig
+  inAppNotifications: SlotLayoutConfig
+  start: SlotLayoutConfig
+  subNav: SlotLayoutConfig
+  titleBar: SlotLayoutConfig
+  toasts: SlotLayoutConfig
+}
+
+type SlotLayoutConfig {
+  height: String
+  isHidden: Boolean
+  width: String
+}
+
+enum SlotName {
+  CONFIGURATIONS
+  CONTEXTUAL_NOTIFICATIONS
+  END
+  HEADER
+  MAIN
+  MODAL
+  MONITOR
+  NAV
+  IN_APP_NOTIFICATIONS
+  NOTIFICATIONS
+  START
+  SUBNAV
+  TITLE_BAR
+  TOASTS
+}
+
+#################### END CORE VIEW STATE SCHEMA ###########################
+
+type BlockingEntityExtension {
+  # The entity extension queued to block the window
+  entity: Entity!
+  # The below params represent a command which has been blocked by the above entity
+  # if undefined, the blockingEntityExtension hasn't done any blocking yet
+  blockedEntity: Entity
+  blockedCommand: EntityCommand
+  blockedEntityOptions: String
+}
+
+# The state of the extended entity container. This includes meta data about
+# where its rendered.
+type ExtendedEntityContainerState {
+  containerState: ExtendedContainerState!
+  isExternal: Boolean!
+}
+
+# The valid states of the extended entity container.
+enum ExtendedContainerState {
+  Cancelled
+  Closed
+  Confirmed
+  Error
+  Open
+}
+
+enum CustomLayoutSelection {
+  Grid
+  Audience
+  LargeGrid
+  FrontRow
+  ImmersiveView
+  Accessibility
+  SpeakerView
+  MixedGridView
+  ContentOnly
+  PrioritizeVideoView
+}
+
+enum MeetingRoomLayoutSelection {
+  ContentAndPeople
+  ContentOnly
+  PeopleOnly
+}
+
+enum WhiteboardWalkUpState {
+  Active
+  Escalated
+  Inactive
+}
+
+input WhiteboardWalkUpStateInput {
+  whiteboardWalkUpState: WhiteboardWalkUpState
+}
+
+# Historical content of a window.
+type WindowHistoryItem {
+  activeEntities: ActiveEntities!
+  # {
+  #   "com.microsoft.chat": {
+  #     selectedChatId: "test
+  #   }
+  # }
+  reactiveVars: JSONData!
+}
+
+enum StaticTabID {
+  organization
+}
+
+input ByodStateInput {
+  isToggleEnabled: Boolean
+  isPoppedOut: Boolean
+}
+
+type ByodState {
+  isToggleEnabled: Boolean!
+  isPoppedOut: Boolean!
+}
+
+type ClientConsumptionHorizon {
+  id: ID! # convId
+  originalArrivalTime: String
+  timeStamp: String
+  clientMessageId: String
+}
+
+input CallingScreenStatusInput {
+  isChatBubblesSuppressed: Boolean
+  hasTogetherModeBeenPinned: Boolean
+  isShareTrayVisible: Boolean
+  isRosterVisible: Boolean
+  hasOnMeetingLandingElementBeenShown: Boolean
+  isDtmfKeypadVisible: Boolean
+  isPstnDialogVisible: Boolean
+  isBroadcastRestartWaitingOverlayVisible: Boolean
+  isAudienceBackgroundDialogVisible: Boolean
+  isTogetherModeSeatSelectionDialogVisible: Boolean
+  isAnnouncementDialogVisible: Boolean
+  isUnlockMeetingDialogVisible: Boolean
+  isInterpretationDialogVisible: Boolean
+}
+
+type CallingScreenStatus {
+  id: ID!
+  isChatBubblesSuppressed: Boolean!
+  hasTogetherModeBeenPinned: Boolean!
+  isShareTrayVisible: Boolean!
+  isRosterVisible: Boolean!
+  hasOnMeetingLandingElementBeenShown: Boolean!
+  isDtmfKeypadVisible: Boolean!
+  isPstnDialogVisible: Boolean!
+  isBroadcastRestartWaitingOverlayVisible: Boolean!
+  isAudienceBackgroundDialogVisible: Boolean!
+  isTogetherModeSeatSelectionDialogVisible: Boolean!
+  isAnnouncementDialogVisible: Boolean!
+  isUnlockMeetingDialogVisible: Boolean!
+  isInterpretationDialogVisible: Boolean!
+}
+
+input VideoScanTypeInput {
+  videoScanType: VideoScanType!
+}
+
+type VideoScanTypeResponse {
+  id: ID!
+  videoScanType: VideoScanType!
+}
+
+enum VideoScanType {
+  whiteboard
+  document
+  video
+  none
+}
+
+input CallingScreenLayoutInput {
+  currentLayout: CustomLayoutSelection
+  meetingRoomLayoutSelection: MeetingRoomLayoutSelection
+  lastSelectedLayout: CustomLayoutSelection
+  initialLayoutBeforeContentPopout: CustomLayoutSelection
+  meetingRoomLayoutPreference: [MeetingRoomLayoutPreferenceUpdate]
+  isFocusModeEnabled: Boolean
+  isNarrowModeActiveByUser: Boolean
+  isNarrowModeActiveByResize: Boolean
+  isHostViewModeWithContentActive: Boolean
+  isLayoutFlipped: Boolean
+  isPresenterHostMode: Boolean
+  isContentPoppedOut: Boolean
+  isPresenterHostModeWithContent: Boolean
+  isVideoInCentralSegment: Boolean
+  currentMixedGridGallerySize: Int
+  isMyselfInBarSegment: Boolean
+  isFrontRowUnifiedBackgroundActivated: Boolean
+  isPanoramicAudienceViewActivated: Boolean
+}
+
+enum FrontRowDefaultPanelType {
+  Auto
+  Hide
+  Chat
+  RaisedHand
+}
+
+type MeetingRoomLayoutPreference {
+  id: CustomLayoutSelection
+  leftPanel: FrontRowDefaultPanelType
+  rightPanel: FrontRowDefaultPanelType
+}
+
+input MeetingRoomLayoutPreferenceUpdate {
+  id: CustomLayoutSelection
+  leftPanel: FrontRowDefaultPanelType
+  rightPanel: FrontRowDefaultPanelType
+}
+
+type CallingScreenLayout {
+  currentLayout: CustomLayoutSelection!
+  meetingRoomLayoutSelection: MeetingRoomLayoutSelection
+  meetingRoomLayoutPreferences: [MeetingRoomLayoutPreference]
+  lastSelectedLayout: CustomLayoutSelection
+  initialLayoutBeforeContentPopout: CustomLayoutSelection
+  isFocusModeEnabled: Boolean
+  isNarrowModeActiveByUser: Boolean
+  isNarrowModeActiveByResize: Boolean
+  isNarrowModeActiveInSpatialAudio: Boolean
+  isHostViewModeWithContentActive: Boolean
+  isLayoutFlipped: Boolean
+  isPresenterHostMode: Boolean
+  isContentPoppedOut: Boolean
+  isPresenterHostModeWithContent: Boolean
+  isVideoInCentralSegment: Boolean
+  currentMixedGridGallerySize: Int
+  isMyselfInBarSegment: Boolean
+  isFrontRowUnifiedBackgroundActivated: Boolean
+  isPanoramicAudienceViewActivated: Boolean
+}
+
+input QuotedReplyInput {
+  displayName: String!
+  from: String!
+  messageId: ID!
+  preview: String!
+  timestamp: Int!
+}
+
+type QuotedReply {
+  displayName: String!
+  from: String!
+  messageId: ID!
+  preview: String!
+  timestamp: Int!
+}
+
+# Broadcast Producer components
+enum BroadcastStreamType {
+  Video
+  ScreenSharing
+}
+
+enum BroadcastLayoutType {
+  Single
+  TwoLargeLeft
+}
+
+enum CaptionFontSizeType {
+  Small
+  Medium
+  Large
+}
+
+enum BroadcastSectionType {
+  Single
+  Left
+  Right
+}
+
+enum StreamType {
+  Video
+  ScreenSharing
+}
+
+enum ScalingMode {
+  Stretch
+  Crop
+  Fit
+}
+
+enum DisplayWaterMark {
+  On
+  Off
+  Fade
+}
+
+type HardwareOutDevice {
+  id: ID!
+  description: String!
+  isAvailable: Boolean!
+  callId: ID
+  participantId: ID
+  localStream: Boolean
+  participantStreamId: Int
+  videoType: StreamType
+  format: String
+  formats: [String]
+  participantDisplayName: String
+}
+
+type BroadcastSource {
+  isLocal: Boolean!
+  participantMri: ID
+  type: BroadcastStreamType!
+}
+
+type BroadcastSourceSection {
+  id: ID!
+  type: BroadcastSectionType!
+  supportedStreamTypes: [BroadcastStreamType!]!
+  source: BroadcastSource
+}
+
+type BroadcastLayout {
+  teamsCallId: ID!
+  type: BroadcastLayoutType!
+  sections: [BroadcastSourceSection!]!
+  activeSectionId: ID!
+}
+
+type DebugBroadcast {
+  id: ID!
+  teamsCallId: ID!
+}
+
+input BroadcastClientSourceInput {
+  isLocal: Boolean!
+  participantMri: ID
+  type: BroadcastStreamType!
+}
+
+enum FluidSourceType {
+  Compose
+  Paste
+}
+
+enum FluidContextType {
+  NonEmbed
+  Embed
+}
+
+type FluidLinkChangedInfo {
+  url: String
+  sourceType: FluidSourceType
+  contextType: FluidContextType
+}
+
+type LinkChangedInfo {
+  url: String
+}
+
+type MessageExtensionsAppsState {
+  toggleRefetch: Boolean!
+}
+
+enum PlatformAppsFetchSource {
+  Cache
+  Network
+}
+
+input PlatformAppsFetchPolicyInput {
+  fetchSource: PlatformAppsFetchSource!
+  scope: AppInstallScope!
+  convId: String
+}
+
+input PlatformAppsFetchPolicyOptions {
+  scope: AppInstallScope!
+  convId: String
+}
+
+type PlatformAppsFetchPolicy {
+  id: ID!
+  scope: AppInstallScope!
+  convId: String
+  forceNetworkFetch: Boolean!
+}
+
+type PlatformAppsFetchPolicyMetadata {
+  fetchPolicyIds: [String!]!
+}
+
+type CallingAllowed {
+  isCallingAllowed: Boolean!
+  isPstnCallingAllowed: Boolean!
+}
+
+enum DebugBroadcastType {
+  QuickStart
+  BYOE
+  QuickStartPushToStream
+  Overflow
+  ODSP
+}
+
+enum BreakoutRoomActionState {
+  Opening
+  OpeningFailed
+  Closing
+  ClosingFailed
+  Deleting
+  DeletingFailed
+}
+
+enum FileViewServiceName {
+  p2p
+  customspo
+  aggregatefiles
+  downloads
+  teams
+  recent
+  personal
+  teamsSdk
+}
+
+input AddFileUploadInput {
+  uploadId: ID!
+  fileContainerId: ID!
+  fileName: String!
+  serviceName: FileViewServiceName!
+  context: String
+}
+
+input ShuffleRoomsParticipantsInput {
+  roomIds: [String!]!
+  participantIds: [String!]!
+}
+
+type BreakoutRoom {
+  "breakout room action state"
+  clientActionState: BreakoutRoomActionState
+}
+
+type BreakoutRoomsClientState {
+  creation: BreakoutRoomsCreationState
+  settings: BreakoutRoomsSettingsState
+}
+
+type BreakoutRoomsCreationState {
+  status: BreakoutRoomsCreationStatus!
+  roomsCount: Int!
+  assignmentType: BreakoutRoomsAssignmentType!
+}
+
+type BreakoutRoomsSettingsState {
+  status: BreakoutRoomsSettingsStatus!
+}
+
+enum BreakoutRoomsAssignmentType {
+  Manual
+  Automatic
+}
+
+enum BreakoutRoomsCreationStatus {
+  Initial
+  Creating
+  AlreadyExist
+  Failed
+}
+
+enum BreakoutRoomsSettingsStatus {
+  Saving
+  Loading
+  FailedToLoad
+  FailedToSave
+  Success
+}
+
+input MoveRoomParticipantsInput {
+  "if not defined just add new participant to toRoom"
+  fromRoomId: ID
+  "if not defined just remove participants from fromRoom"
+  toRoomId: ID
+  participantsIds: [String!]!
+}
+
+input RemoveFileUploadInput {
+  uploadId: ID!
+  fileContainerId: ID!
+}
+
+enum TaskModuleEntryPoints {
+  Card
+  MessageExtension
+  PlatformExtensionTab
+  DeepLink
+  ShareToOutlook
+  ContentBubble
+  AdaptiveCardTab
+  BotConfig
+}
+
+enum TaskModuleClosedReason {
+  CancelledByUser
+  Done
+}
+
+type PlatformCard {
+  appIcon: String
+  appId: ID
+  appName: String
+  content: String!
+  contentType: String!
+  locale: String
+}
+
+type SelectMediaResult {
+  selectMediaError: String
+  mediaUrls: [String!]
+}
+
+type ViewImagesResult {
+  viewImagesError: String
+  errorCode: Int
+}
+
+input PlatformCardInput {
+  appIcon: String
+  appId: ID
+  appName: String
+  content: String!
+  contentType: String!
+  locale: String
+}
+
+type TaskModuleResult {
+  card: PlatformCard
+  adaptiveCardTabResult: [PlatformCard]
+  text: String
+  taskModuleId: ID!
+  draftId: String
+  conversationId: String
+  reason: TaskModuleClosedReason
+  entryPoint: TaskModuleEntryPoints!
+}
+
+type tabConfigurationResult {
+  id: String!
+  tabId: ID!
+}
+
+type TabDeletionResult {
+  threadId: String!
+  channelMeetingMessageId: String
+  tabId: String!
+}
+
+type messageToParentResult {
+  appId: ID!
+  message: String!
+}
+
+type messageToChildResult {
+  appId: ID!
+  message: String!
+}
+
+type ChangeSettingsResult {
+  id: ID!
+  status: Boolean!
+  appId: String
+  tabId: String
+}
+
+type AppButtonResult {
+  appId: ID!
+  action: String!
+}
+
+type ChangeSettingsTriggerResult {
+  id: ID!
+  message: String!
+  appId: String
+  tabId: String
+}
+
+type AppDetailsResult {
+  appInstallId: ID!
+  appId: ID!
+  isAppInstalled: Boolean!
+  errorCode: String
+}
+
+type ArchiveTeamResult {
+  archiveSharepointSite: Boolean
+}
+
+type InContextStoreLaunchInstalledAppResult {
+  id: ID!
+  appId: ID!
+  capability: String!
+  appDisplayName: String
+  draftId: String
+}
+
+type CustomAppUploadResult {
+  customAppType: CustomAppType!
+}
+
+type MapCoordinateResult {
+  latitude: Float
+  longitude: Float
+  locationApiError: String
+}
+
+type SelectPeoplePickerResult {
+  objectId: String!
+  displayName: String
+  email: String
+}
+
+input SubscribedCallChangeDebugUpdate {
+  newAutomuteValue: Boolean
+  isPSTNEnabled: Boolean!
+  participants: [ParticipantUpdate]
+  callId: ID!
+  numParticipantsNoBots: Int
+  state: Int
+  isPSTNInitialized: Boolean!
+}
+
+type SubscribedCallChangeDebug {
+  newAutomuteValue: Boolean
+  isPSTNEnabled: Boolean!
+  participants: [Participant]
+  callId: ID!
+  numParticipantsNoBots: Int
+  state: Int
+  isPSTNInitialized: Boolean!
+}
+
+type BiometricEnrollmentMedia {
+  streamUrl: String
+}
+
+type Room {
+  name: String!
+  address: String!
+  buildingAddress: String
+  userId: ID
+  rssi: Int
+  proximityValidationCode: Int
+  isAlreadyInMeeting: Boolean
+  isAlreadyInAnyMeeting: Boolean
+  meetingHash: String
+}
+
+input TriggerBluetoothStateChangedDebugInput {
+  isBleSupported: Boolean
+  isRadioOn: Boolean
+}
+
+input TriggerRaiseHandStateChangedEventInput {
+  participantId: ID!
+  isHandRaised: Boolean!
+  displayName: String
+  raiseHandRank: Int
+  raiseHandSkinTone: Int
+}
+
+type ComposeMessageState {
+  id: ID!
+  isExpanded: Boolean!
+}
+
+type MessagePaneScrolledToStartState {
+  id: ID!
+  isScrolledToStart: Boolean!
+}
+
+# The Loop component entries are stored in a JSON stringified array form.
+type FluidManifestEntries {
+  locale: String!
+  entries: String!
+  timestamp: Int!
+}
+
+enum VideoEffect {
+  Off
+  BackgroundBlur
+  AutoAdjust
+  WhiteboardZoom
+  WhiteboardCleanup
+  WhiteboardZoomAndCleanup
+}
+
+enum VideoEffectStateType {
+  Unavailable
+  Off
+  Loading
+  On
+  Error
+}
+
+enum WebinarAccessPolicy {
+  Everyone
+  EveryoneInCompany
+}
+
+input WebinarDetailsInput {
+  title: String!
+  description: String!
+  startTime: String!
+  endTime: String!
+  accessPolicy: WebinarAccessPolicy!
+  capacity: Int
+}
+
+input WebinarSpeakerInput {
+  speakerId: ID!
+  displayName: String!
+  description: String!
+}
+
+enum WebinarQuestionnaireType {
+  SingleChoice
+  MultiChoice
+  SingleLineText
+  MultiLineText
+}
+
+input WebinarQuestionInput {
+  # The id used by backend to identify a question item in storage.
+  questionId: ID!
+  # The display order in a list of questions.
+  order: Int!
+  # The non-localized question name like "FirstName", "LastName", etc.
+  # Only applicable to predefined question.
+  name: String
+  # The localized question name configured by organizer.
+  # Only applicable to non-predefined question.
+  displayName: String
+  # Type of this question.
+  type: WebinarQuestionnaireType!
+  # Choice options for a question. Only applicable for choice type question.
+  options: [String!]
+  # Flag indicates whether question requires attendees to answer.
+  isRequired: Boolean!
+  # Flag indicates whether question is predefined or not (organizer customized).
+  isPredefined: Boolean!
+}
+
+input WebinarRegistrationResultInput {
+  isUserAlreadyRegistered: Boolean!
+  joinLink: String!
+  registrationId: String!
+}
+
+input WebinarImageInput {
+  image: String!
+}
+
+type Webinar {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+input FluidMessageInput {
+  id: ID!
+  messageId: ID!
+  originalArrivalTime: String!
+}
+
+type FluidMessage {
+  id: ID!
+  messageId: ID!
+  originalArrivalTime: String!
+}
+
+type FluidPendingMention {
+  atMentionId: ID!
+  userPrincipalName: String!
+  contentId: String!
+  navigationPath: String!
+}
+
+input FluidPendingMentionInput {
+  atMentionId: ID!
+  userPrincipalName: String!
+  contentId: String!
+  navigationPath: String!
+}
+
+type FluidInsertedHyperlink {
+  displayText: String!
+  address: String!
+}
+
+# Reprensents token type provided by office 365 services
+enum RegistrationOperationType {
+  # Default type is get the registration information
+  GetRegistrationInformation
+  # Enable registration during create event flow
+  CreateEventEnableRegistration
+  # Enable registration during update flow
+  UpdateEventEnableRegistration
+  # Disable Registration during update flow
+  UpdateEventDisableRegistration
+  # Cancel/ Delete Event flow with removing registration
+  RemoveRegistration
+}
+
+# Represents Webinar registration info
+type WebinarRegistrationInfo {
+  # Gets or sets Registration url.
+  registrationUrl: String
+  # The access policy.
+  accessPolicy: WebinarAccessPolicy
+  # Specifies the operation so that right validation and updates happen
+  operationType: RegistrationOperationType
+  # Gets or sets the Webinar id
+  webinarId: ID
+  # Gets or sets a flag that indicates if the webinar was created using template.
+  isTemplateBasedFlow: Boolean
+}
+
+input SelectMediaResultInput {
+  selectMediaError: String
+  mediaUrls: [String!]
+}
+
+input ViewImagesResultInput {
+  viewImagesError: String
+  errorCode: Int
+}
+
+input WebinarRegistrationInfoInput {
+  registrationUrl: String
+  accessPolicy: WebinarAccessPolicy
+  operationType: RegistrationOperationType
+  webinarId: ID
+  isTemplateBasedFlow: Boolean
+}
+
+# Kind of the call participant, which can be added to the call
+enum CallParticipantKind {
+  # Standard - participant with two standard streams (Video, Screenshare)
+  Standard
+  # PlazaRoom - entire room with own participants (streams) can up to 6 streams
+  PlazaRoom
+}
+
+# VirtualEvent
+type VirtualEvent {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+type SchedulingFormData {
+  oldEvent: SchedulingFormViewModel!
+  oldEventTypeInfo: CalendarEventTypeInfo!
+  event: SchedulingFormViewModel!
+  eventTypeInfo: CalendarEventTypeInfo!
+  virtualEventDetails: VirtualEvent
+  iteration: Int!
+}
+
+type SchedulingFormViewModel {
+  attachments: [AttachmentObject]
+  bodyContent: String
+  bodyContentType: String
+  categories: [String!]
+  cleanGlobalObjectId: String
+  clientOptimisticEventId: String
+  contextId: String
+  doNotForward: Boolean
+  emptyBodyPlaceholder: String
+  endTime: DateTime
+  eTag: String
+  eventRecurrencePattern: RecurrencePatternObject
+  eventRecurrenceRange: RecurrenceRangeObject
+  eventTimeZone: ScalarEnumString
+  hasAttachments: Boolean
+  iCalUID: String
+  inviteAllMembers: Boolean
+  isAllDayEvent: Boolean
+  isAppointment: Boolean
+  isOnlineTeamsMeeting: Boolean
+  isCancelled: Boolean
+  isOnlineMeeting: Boolean
+  isOptimisticEvent: Boolean
+  isOrganizer: Boolean
+  isPrivate: Boolean
+  isReminderSet: Boolean
+  isResponseRequested: Boolean
+  joinMeetingLabel: String
+  joinOnlineMeetingUrl: String
+  location: String
+  mailboxAddress: String
+  meetingAgenda: String
+  meetingTemplateId: String
+  myResponseType: String
+  objectId: ID
+  objectUrl: String
+  parentConversationId: String
+  primarySpokenLanguage: String
+  putAnonymousInLobby: Boolean
+  recurrenceEnd: String
+  recurrencePattern: String
+  reminderMinutesBeforeStart: Int
+  reminderTime: String
+  seriesMasterId: String
+  showAs: ScalarEnumString
+  skypeTeamsData: String
+  skypeTeamsMeetingUrl: String
+  startTime: DateTime
+  state: ScalarEnumString
+  subject: String
+  utcOffset: Float
+
+  channel: ChannelAttendee
+  organizer: AttendeeObject
+  locations: [LocationAttendee]
+  requiredAttendee: [AttendeeObject]
+  optionalAttendee: [AttendeeObject]
+  forwardAttendees: [AttendeeObject]
+
+  privateMeetingSSEvent: SchedulingServiceMeetingEvent
+
+  skypeTeamsDataObj: SkypeTeamsDataObj
+
+  schedulingServiceUpdateUrl: String
+  webinarRegistration: WebinarRegistrationInfo
+  meetingAgendaObj: MeetingAgendaObject
+  templateMeetingParameters: TemplateMeetingParametersObject
+  virtualEventsData: VirtualEventsData
+  virtualAppointmentInfo: VirtualAppointmentInfo
+  rightsManagementLicenseData: RightsManagementLicenseData
+  sensitivityLabelId: String
+  previousSensitivityLabelId: String
+  downgradeLabelJustification: String
+  coverImage: String
+  coverImageReference: String
+  coverImageAction: CoverImageAction
+}
+
+type RightsManagementLicenseData {
+  rmsTemplateId: ID
+  templateName: String
+  templateDescription: String
+  editAllowed: Boolean
+  replyAllowed: Boolean
+  replyAllAllowed: Boolean
+  forwardAllowed: Boolean
+  modifyRecipientsAllowed: Boolean
+  extractAllowed: Boolean
+  printAllowed: Boolean
+  exportAllowed: Boolean
+  programmaticAccessAllowed: Boolean
+  isOwner: Boolean
+  contentOwner: String
+  contentExpiryDate: String
+  rightsManagedMessageDecryptionStatus: Int
+  bodyType: String
+}
+
+type AttachmentObject {
+  id: ID
+  name: String
+  size: Int
+  contentType: String
+  fileName: String
+  isInline: Boolean
+  contentId: String
+  attachmentType: AttachmentType
+  attachLongPathName: String
+  providerType: String
+  providerEndpointUrl: String
+}
+
+type RecurrencePatternObject {
+  patternType: ScalarEnumString
+  daily: DailyPatternObject
+  weekly: WeeklyPatternObject
+  monthly: MonthlyPatternObject
+  relativeMonthly: RelativeMonthlyPatternObject
+  yearly: YearlyPatternObject
+  relativeYearly: RelativeYearlyPatternObject
+}
+
+type RecurrenceRangeObject {
+  startDate: ScalarEnumString
+  endDate: ScalarEnumString
+}
+
+type ChannelAttendee {
+  status: ResponseStatus
+  type: AttendeeType
+  address: String
+  name: String
+  mri: String
+  role: UserRole
+  broadcastMeetingRole: String
+  groupType: AttendeeGroupType
+  isGroup: Boolean
+  objectId: String
+
+  id: ID
+  displayName: String
+  isGeneral: Boolean
+  substrateGroupId: String
+  channelResourceTenantId: String
+  isBackedBySubstrateGroup: Boolean
+  memberCount: Int
+  channelType: ClientChannelType
+  team: SchedulingFormTeamType
+}
+
+type AttendeeTimeZoneObject {
+  timeZone: String
+  timeZoneOffset: Int
+  attendeeLocalTime: DateTime
+}
+
+type AttendeeObject {
+  status: ResponseStatus
+  type: AttendeeType
+  address: String
+  name: String
+  mri: String
+  role: UserRole
+  broadcastMeetingRole: String
+  groupType: AttendeeGroupType
+  isGroup: Boolean
+  objectId: String
+
+  upn: String
+  availabilityStatus: ScalarEnumString
+  meetingRole: String
+  userType: String
+  timezoneInfo: AttendeeTimeZoneObject
+}
+
+type LocationAttendee {
+  status: ResponseStatus
+  type: AttendeeType
+  address: String
+  name: String
+  mri: String
+  role: UserRole
+  broadcastMeetingRole: String
+  groupType: AttendeeGroupType
+  isGroup: Boolean
+  objectId: String
+
+  upn: String
+  availabilityStatus: AvailabilityFreeBusyType
+
+  locationType: LocationType
+}
+
+type SchedulingServiceMeetingEvent {
+  groupContext: SchedulingServiceChatContextObject
+  etag: String
+  meetingUrl: String
+  links: SchedulingServiceMeetingLinksObject
+  views: SchedulingServiceMeetingViewsObject
+  onlineMeetingConfLink: String
+  onlineMeetingConferenceId: String
+  onlineMeetingTollFreeNumbers: [String]
+  onlineMeetingTollNumber: String
+  teamsVtcTenantId: String
+  teamsVtcConferenceId: String
+  startTime: DateTime
+  endTime: DateTime
+  subject: String
+  promiseState: SchedulingServiceMeetingPromiseState
+}
+
+type MeetingAgendaObject {
+  type: MeetingAgendaType
+  location: String
+  shareLink: String
+  metadata: MeetingAgendaMetadataObject
+}
+
+type TemplateMeetingParametersObject {
+  templateId: String
+  eventObjectId: String
+  meetingType: Int
+  language: String
+}
+
+type VirtualEventsData {
+  eventId: String
+  eventUrl: String
+  sessionId: String
+}
+
+type VirtualAppointmentInfo {
+  appointmentId: String
+  settings: VirtualAppointmentSettings
+  appointmentClients: [VirtualAppointmentClient]
+  eTag: String
+}
+
+type VirtualAppointmentSettings {
+  allowClientToJoinUsingBrowser: Boolean!
+  notifications: [String]
+}
+
+type VirtualAppointmentClient {
+  displayName: String!
+  emailAddress: String!
+  smsCapablePhoneNumber: String
+  smsCountryCode: String
+}
+
+enum SchedulingServiceMeetingPromiseState {
+  Uninitialised
+  InProgress
+  Resolved
+  Rejected
+}
+
+enum AttachmentType {
+  ItemAttachment
+  FileAttachment
+  ReferenceAttachment
+}
+
+type DailyPatternObject {
+  interval: Int
+}
+
+type WeeklyPatternObject {
+  daysOfTheWeek: [ScalarEnumString]
+  interval: Int
+}
+
+type MonthlyPatternObject {
+  dayOfMonth: Int
+  interval: Int
+}
+
+type RelativeMonthlyPatternObject {
+  dayOfTheWeekIndex: ScalarEnumString
+  dayOfTheWeek: ScalarEnumString
+  interval: Int
+}
+
+type YearlyPatternObject {
+  month: ScalarEnumString
+  dayOfTheMonth: Int
+}
+
+type RelativeYearlyPatternObject {
+  month: ScalarEnumString
+  dayOfTheWeekIndex: ScalarEnumString
+  dayOfTheWeek: ScalarEnumString
+}
+
+enum AttendeeType {
+  Required
+  Optional
+  Resource
+  Organizer
+  Room
+}
+
+enum UserRole {
+  User
+  Admin
+  Guest
+  None
+}
+
+enum AttendeeGroupType {
+  StreamGroup
+  SecurityGroup
+}
+
+type SchedulingFormTab {
+  id: ID
+  type: String
+}
+
+type SchedulingFormTeamType {
+  id: ID
+  displayName: String
+  smtpAddress: String
+  groupId: String
+  pictureETag: String
+  tenantId: String
+  sensitivityLabel: SensitivityLabelConversation
+}
+
+type SchedulingServiceChatContextObject {
+  threadId: String
+  additionalMessageId: String
+  messageId: Int
+}
+
+type SchedulingServiceMeetingLinksObject {
+  join: String
+  update: String
+}
+
+type SchedulingServiceMeetingViewsObject {
+  html: String
+}
+
+enum MeetingAgendaType {
+  collaborativeSpace
+}
+
+type MeetingAgendaMetadataObject {
+  state: MeetingAgendaState
+  isShared: Boolean
+  linkScope: String
+  hostClient: MeetingAgendaHostClient
+}
+
+enum MeetingAgendaHostClient {
+  TeamsInMeeting
+  TeamsCalendarDetailsPage
+  TeamsCalendarScheduling
+}
+
+enum MeetingAgendaState {
+  Disabled
+  Enabled
+}
+
+type CalendarEventTypeInfo {
+  displayMode: Int
+  meetingType: Int
+  dataFetched: Boolean
+  profilesFetched: Boolean
+  meetingSource: Int
+  isCancelled: Boolean
+  eventType: CalendarAppointmentType
+  isOrganizer: Boolean
+  firstEdit: Boolean
+  meetingOptionsEdited: Boolean
+  isChannelAccessible: Boolean
+  isChatAccessible: Boolean
+  eventOrigin: Int
+  isFullEventCached: Boolean
+  isWhiteboardEnabled: Boolean
+  isMeetingNotesEnabled: Boolean
+  hasTranscript: Boolean
+  isOnlineAppointment: Boolean
+}
+
+type DraftChatIdChangedInfo {
+  id: ID!
+  oldChatId: ID
+  newChatId: ID
+}
+
+enum PinnedConversationItemType {
+  Message
+}
+
+input PinnedConversationItemInput {
+  itemId: ID!
+  itemType: PinnedConversationItemType!
+}
+
+input MapCoordinateResultInput {
+  latitude: Float
+  longitude: Float
+  locationApiError: String
+}
+
+input SelectPeoplePickerResultInput {
+  objectId: String!
+  displayName: String
+  email: String
+}
+
+union PinnedConversationItemInfo = Message
+
+type BackgroundsInfo {
+  imageId: String
+  imagePath: String
+  imageStatus: String
+  imageProvider: String
+  imageName: String
+  imageSrc: String
+}
+
+input BackgroundsInfoUpdate {
+  imageId: String
+  imagePath: String
+  imageStatus: String
+  imageProvider: String
+  imageName: String
+  imageSrc: String
+}
+
+type SelectedAvatarInfo {
+  id: ID!
+  appId: String
+  # prop showing if it's in the process after a filter is clicked and before it is applied to video, which is the filter loading process
+  isFilterApplyUnderLoadingProcess: Boolean
+  filterId: String
+  # background image
+  imageId: String
+}
+
+input SelectedAvatarInfoInput {
+  appId: String
+  isFilterApplyUnderLoadingProcess: Boolean
+  filterId: String
+  imageId: String
+}
+
+type VideoEffectInfo {
+  appId: String!
+  appName: String!
+  filterId: String!
+}
+
+input VideoEffectInfoInput {
+  appId: String!
+  appName: String!
+  filterId: String!
+}
+
+type VideoAppInfo {
+  appId: String!
+  appName: String!
+  developerName: String!
+  effectCount: Int!
+  isInstalled: Boolean!
+}
+
+input VideoAppInfoInput {
+  appId: String!
+  appName: String!
+  developerName: String!
+  effectCount: Int!
+  isInstalled: Boolean!
+}
+
+type InstallingVideoEffectInfo {
+  appId: String!
+  appName: String!
+  developerName: String!
+  effectCount: Int!
+  filterId: String!
+}
+
+input InstallingVideoEffectInfoInput {
+  appId: String!
+  appName: String!
+  developerName: String!
+  effectCount: Int!
+  filterId: String!
+}
+
+type ActiveVideoEffects {
+  first: VideoEffectInfo!
+  second: VideoEffectInfo!
+  third: VideoEffectInfo!
+}
+
+input ActiveVideoEffectsInput {
+  first: VideoEffectInfoInput
+  second: VideoEffectInfoInput
+  third: VideoEffectInfoInput
+}
+
+type VideoEffectsCurrentInfo {
+  isInstallingVideoEffectInfo: InstallingVideoEffectInfo!
+  isShowingAppPageVideoEffect: VideoEffectInfo!
+  isAppliedVideoEffect: VideoEffectInfo!
+  isUnderApplyingProcessVideoEffect: VideoEffectInfo!
+  allVideoApps: [VideoAppInfo!]!
+  isAppAcquisitionOngoing: Boolean
+}
+
+input UpdateVideoEffectsCurrentInfoVariables {
+  isInstallingVideoEffectInfo: InstallingVideoEffectInfoInput
+  isShowingAppPageVideoEffect: VideoEffectInfoInput
+  isAppliedVideoEffect: VideoEffectInfoInput
+  isUnderApplyingProcessVideoEffect: VideoEffectInfoInput
+  allVideoApps: [VideoAppInfoInput!]
+  isAppAcquisitionOngoing: Boolean
+}
+
+input UpdateActiveVideoEffectsVariables {
+  activeVideoEffects: ActiveVideoEffectsInput!
+}
+
+enum CallClosedCaptionsStatus {
+  None
+  Started
+  Stopped
+  Pending
+  Failed
+}
+
+input ClosedCaptionsTextTrackInput {
+  language: String
+  source: ClosedCaptionsTextTrackSource
+}
+
+enum ClosedCaptionsTextTrackSource {
+  Ai
+  Cart
+  Cea708
+}
+
+enum VideoAppPostMessageEvent {
+  ApplyClicked
+  Other
+}
+
+type VideoNotification {
+  id: String
+  text: String
+  actionId: String
+  actionText: String
+  videoEffectInfo: VideoEffectInfo
+}
+
+input VideoNotificationInput {
+  id: String
+  text: String
+  actionId: String
+  actionText: String
+  videoEffectInfo: VideoEffectInfoInput
+}
+
+type AvatarErrorNotification {
+  id: String
+  text: String
+  actionId: String
+  actionText: String
+}
+
+input AvatarErrorNotificationInput {
+  id: String
+  text: String
+  actionId: String
+  actionText: String
+}
+
+type OptionalTelemetryDataBags {
+  fluidDataLossOccurred: Boolean
+  fluidDataLossPrevented: Boolean
+}
+
+type StreamCameraDialogReturn {
+  videoBlobsCacheKey: String!
+  videoBlobSize: Int!
+  recordingWidth: Int!
+  recordingHeight: Int!
+  duration: Int!
+  thumbnailBlobSize: Int
+}
+
+input SmartReplyFileSuggestionInput {
+  fileName: String!
+  url: String!
+}
+
+type SmartReplyFileSuggestion {
+  fileName: String!
+  url: String!
+}
+
+type CoachMarkCommandResult {
+  id: ID!
+}
+
+input WebinarUnifiedDataInput {
+  id: ID!
+  title: String
+  eventType: AppointmentType!
+  startTime: String!
+  endTime: String!
+  eventRecurrencePattern: RecurrencePatternInput
+  eventRecurrenceRange: RecurrenceRangeInput
+}
+
+enum AppointmentType {
+  Single
+  Occurrence
+  Exception
+  RecurringMaster
+}
+
+input RecurrencePatternInput {
+  patternType: ScalarEnumString!
+  daily: DailyPatternInput
+  weekly: WeeklyPatternInput
+  monthly: MonthlyPatternInput
+  relativeMonthly: RelativeMonthlyPatternInput
+  yearly: YearlyPatternInput
+  relativeYearly: RelativeYearlyPatternInput
+}
+
+input RecurrenceRangeInput {
+  startDate: ScalarEnumString!
+  endDate: ScalarEnumString
+}
+
+input DailyPatternInput {
+  interval: Int
+}
+
+input WeeklyPatternInput {
+  daysOfTheWeek: [ScalarEnumString!]!
+  interval: Int!
+}
+
+input MonthlyPatternInput {
+  dayOfMonth: Int!
+  interval: Int!
+}
+
+input RelativeMonthlyPatternInput {
+  dayOfTheWeekIndex: ScalarEnumString!
+  dayOfTheWeek: ScalarEnumString!
+  interval: Int!
+}
+
+input YearlyPatternInput {
+  month: ScalarEnumString!
+  dayOfTheMonth: Int!
+}
+
+input RelativeYearlyPatternInput {
+  month: ScalarEnumString!
+  dayOfTheWeekIndex: ScalarEnumString!
+  dayOfTheWeek: ScalarEnumString!
+}
+
+# Payment provider
+type PaymentProvider {
+  id: ID!
+  name: String
+}
+
+input PaymentProviderInput {
+  id: ID!
+  name: String
+}
+
+# Currency
+type Currency {
+  # ISO 4217 code
+  code: String!
+  name: String
+  isDefault: Boolean
+}
+
+input CurrencyInput {
+  code: String!
+}
+
+# Product
+type PaymentProduct {
+  description: String!
+  price: Price!
+}
+
+input PaymentProductInput {
+  description: String!
+  price: PriceInput!
+}
+
+# Price
+type Price {
+  amount: String!
+  currency: Currency!
+}
+
+type UpdateMyselfSettings {
+  id: String!
+  isMyselfHidden: Boolean!
+}
+
+input PriceInput {
+  amount: String!
+  currency: CurrencyInput!
+}
+
+# Payment Details
+type PaymentDetails {
+  # workaround since parser doesn't allow empty types for now
+  _: Boolean
+}
+
+input PaymentDetailsInput {
+  id: ID
+  eventId: ID!
+  paymentProvider: PaymentProviderInput!
+  product: PaymentProductInput!
+}
+
+type AvatarItem {
+  id: String
+  name: String
+  # value for avatar or background
+  type: String
+  # url for thumbnail
+  thumbnail: String
+}
+
+input AvatarItemInput {
+  id: String
+  name: String
+  # value for avatar or background
+  type: String
+  # url for thumbnail
+  thumbnail: String
+}
+
+type AvatarPayload {
+  avatarItems: [AvatarItem]
+}
+
+input AvatarInfoInput {
+  avatarItems: [AvatarItemInput]
+}
+
+enum AppDevicePermissionsUpdatedStatus {
+  updated
+  notUpdated
+}
+
+type AppDevicePermissionsUpdated {
+  id: ID!
+  status: AppDevicePermissionsUpdatedStatus!
+}
+
+input SetAppDevicePermissionsUpdatedInput {
+  id: ID!
+  status: AppDevicePermissionsUpdatedStatus!
+}
+
+input LocalFrameContextInput {
+  id: ID!
+  threadId: String
+  messageId: String
+  tabId: String
+  websiteUrl: String
+  contentUrl: String
+}
+
+type LocalFrameContext {
+  id: ID!
+  threadId: String
+  messageId: String
+  tabId: String
+  websiteUrl: String
+  contentUrl: String
+}
+
+input SetVirtualEventActionInput {
+  type: VirtualEventAction
+}
+
+enum VirtualEventAction {
+  # a virtual event cancel action has been triggered.
+  Cancel
+  # a virtual event publish action has been triggered.
+  Publish
+}
+
+type MeetingBotMetaInfo {
+  meetingBotMri: String
+}
+
+type MeetingBotCalendarEvent {
+  id: ID!
+  start: String!
+  end: String!
+  iCalUID: String
+  subject: String
+  objectId: String
+  conversationId: String
+  skypeTeamsMeetingUrl: String
+  isCancelled: Boolean
+  isAllDayEvent: Boolean
+}
+
+enum CommandActions {
+  BookFollowUpMeeting
+  StopRecording
+  CheckAttendance
+  DropCurrentMeeting
+  JoinNextMeeting
+  MuteAllParticipants
+  OpenBotInMeetingChat
+  OpenFeedback
+  RemindInMeetingChat
+  SendRunningLateMessage
+  ShareCurrentMeeting
+  ShareFile
+  ShareFiles
+  ShareMyScreen
+  SharePresentedDeck
+  ShowDeviceSettings
+  ShowMeetingOptions
+  ShowMissingParticipants
+  StartLiveCaptions
+  StartRecording
+  StartTranscription
+  StopLiveCaptions
+  StopTranscription
+}
+
+input MeetingBotFileInput {
+  name: String!
+  url: String!
+  fileType: String
+}
+
+enum CallRecordingState {
+  None
+  Pending
+  Recording
+  Paused
+  Stopping
+  Failed
+  Disabled
+  WaitingForMeetingLive
+  Waiting
+}
+
+input PostGreetingToMeetingBotInput {
+  meetingId: String!
+  organizerId: String!
+  recordingState: CallRecordingState!
+  hasPresentedDeck: Boolean!
+  hasRecordingStarted: Boolean!
+  hasProactiveAction: Boolean!
+  absentAttendee: [String!]
+  timeElapedSinceMeetingStartedInMinutes: Float!
+  hasNextMeeting: Boolean!
+  endTime: String!
+  isRecurrent: Boolean
+}
+
+type VirtualEventSchedulingFormData {
+  hasUnsavedChanges: Boolean!
+}
+
+input VirtualEventSchedulingFormDataInput {
+  hasUnsavedChanges: Boolean
+}
+
+type AvatarAppAvailabilityInfo {
+  available: Boolean
+  dataFetched: Boolean
+}
+
+input AvatarAppAvailabilityInfoInput {
+  available: Boolean
+  dataFetched: Boolean
+}
+
+input BackButtonHandlerStateInput {
+  id: ID!
+  registered: Boolean
+}
+
+type BackButtonHandlerState {
+  id: ID!
+  registered: Boolean
+}
+
+type ImmersiveViewModeAppAvailabilityInfo {
+  isAppAvailable: Boolean
+  timestamp: Float
+}
+
+input ImmersiveViewModeAppAvailabilityInfoInput {
+  isAppAvailable: Boolean
+  timestamp: Float
+}
+type M365ChatBotStopGeneratingScenario {
+  scenarioId: String
+  traceId: String
+}
+
+type M365ChatBotState {
+  shouldShowStopGeneratingButton: Boolean!
+  shouldShowStopGeneratingLoadingButton: Boolean!
+  shouldShowRetryButton: Boolean!
+  shouldDisableM365ChatCompose: Boolean!
+}
+
+enum CoverImageAction {
+  Update
+  Delete
+  NoChange
+}
+
+enum M365ChatExperience {
+  Default
+  Suggestion
+  FirstRunNoParams
+  FirstRunContextIQ
+}
+
+type M365ChatSuggestionState {
+  convId: String
+  experience: M365ChatExperience
+  query: String
+}
+
+type M365ChatBotTelemetry {
+  scenarioId: String
+  queryMessageId: String
+  queryMessageSendsTimestamp: Int
+  firstControlMessageArrivesTimestamp: Float
+  firstControlMessageRendersTimestamp: Float
+  firstMainAnswerArrivesTimestamp: Float
+  firstMainAnswerRendersTimestamp: Float
+  lastMainAnswerArrivesTimestamp: Float
+  lastMainAnswerRendersTimestamp: Float
+}
+
+type M365ChatBotDisableSendTimeout {
+  timeoutId: Int
+}
+
+type M365ChatBotFlair {
+  canShowFlair: Boolean!
+}
+
+type M365GeoLocation {
+  latitude: Float!
+  longitude: Float!
+}
+
+type DebugClosedCaptionsEvent {
+  id: ID
+  isStart: Boolean
+  text: String
+  isFinal: Boolean
+  userId: String
+}
+
+type CalendarSurfaceFilterValue {
+  key: String
+  value: String
+}

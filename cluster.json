@@ -1,0 +1,141 @@
+{
+
+    "server-schema.graphql": 
+  
+      {
+  
+        "Code and schema changes": [
+  
+          "Separate server-schema changes in a separate PR",
+          
+          "Ensure backward compatibility when making schema changes",
+  
+          "Test the container with R0 web client",
+  
+          "Avoid making breaking changes to the schema"
+  
+        ],
+  
+        "Naming and Documentation": [
+  
+          "Use meaningful and descriptive names for variables and functions",
+  
+          "Add comments to explain the purpose and usage of code",
+  
+          "Follow consistent naming conventions throughout the file",
+  
+          "Document any dependencies or dependencies"
+  
+        ]
+  
+      },
+    "module.graphql":
+  
+      {
+  
+        "Code organization and naming": [
+  
+          "Ensure clear and consistent naming conventions",
+  
+          "Organize code in a logical and understandable manner",
+  
+          "Keep code modular and easy to maintain",
+  
+          "Ensure proper use of libraries and packages"
+  
+        ]
+  
+      ,
+  
+      
+  
+        "Modifying the File": [
+  
+          "Separate module.graphql changes into their own PR",
+  
+          "Follow the 3-step process for schema changes",
+  
+          "Update resolvers and related components when making schema changes",
+  
+          "Consider the impact on T1 Hybrid scenarios and backwards compatibility"
+  
+        ]
+  
+      ,
+  
+      
+  
+        "Handling Nullability and Required Fields": [
+  
+          "Ensure that null values are handled appropriately in the file",
+  
+          "Consider whether certain fields should be required or non-nullable",
+  
+          "Use the ID type for identifier fields where applicable",
+  
+          "Validate input parameters and return objects for mutations",
+  
+          "Include an 'id' field with type 'ID!' for root-level objects"
+  
+        ]
+  
+      }
+  
+    ,
+  
+    "client-schema.graphql":
+  
+      {
+  
+        "Improving Entity Design and Naming": [
+  
+          "Ensure entity types are generic and re-usable",
+  
+          "Use noun-based entity types, not actions",
+  
+          "Avoid ambiguous or misleading entity names",
+  
+          "Follow the pattern of existing entity types",
+  
+          "Consider using unique IDs for entities"
+  
+        ]
+  
+      ,
+  
+      
+  
+        "Required fields and types": [
+  
+          "Make sure all necessary fields have appropriate types and are required",
+  
+          "Use ID type for identifier fields",
+  
+      "Consider using enumerations for certain fields",
+  
+          "Set response types as required to avoid null checks",
+  
+          "Avoid using 'Type' in type names"
+  
+        ]
+  
+      ,
+  
+      
+  
+        "Code Organization and Naming": [
+  
+          "Maintain alphabetical order",
+  
+          "Specify details in comments",
+  
+          "Use clear and descriptive names",
+  
+          "Avoid unnecessary changes",
+  
+          "Keep code consistent and readable"
+  
+        ]
+  
+      }
+  }

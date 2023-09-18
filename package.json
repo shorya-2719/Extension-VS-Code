@@ -1,8 +1,8 @@
 {
   "name": "fetch-file-name-and-map",
-  "displayName": "Fetch-file-Name-And-Map",
+  "displayName": "MS-DeveloPR-Bot",
   "description": "It will fetch the name of the file and map it to a key value pair in a json file that is stored locally",
-  "icon" : "./spidy.png",
+  "icon" : "./test.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.82.0"
@@ -15,7 +15,7 @@
   "contributes": {
     "commands": [{
       "command": "fetch-file-name-and-map.myCommand",
-      "title": "Display sidebar"
+      "title": "View checklist for current file"
     }],
     "views": {
       "your-extension-name": [
